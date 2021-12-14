@@ -1,14 +1,14 @@
 <template>
     <div class="container">
-        welcome
+        456
     </div>
 </template>
 
 <script>
-import Basic from "@/Layouts/Basic";
+import Basic from "../../../Layouts/Basic"
 
 export default {
-    layout: Basic
+    layout: Basic,
 }
 </script>
 
