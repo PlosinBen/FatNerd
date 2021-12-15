@@ -1,21 +1,19 @@
 <template>
     <div class="flex flex-col h-screen">
         <section class="bg-white border-b shadow select-none">
-            <header class="container mx-auto flex px-4 justify-between h-16">
-                <div class="flex items-center">
-                    <Link href="/" class="text-4xl text-white font-bold">
-                        <h1>
-                            <img class="h-20" src="https://www.lovelion.me/logo.png" alt="LoveLion">
-                        </h1>
-                    </Link>
+            <header class="container mx-auto flex px-4 justify-between items-center">
+                <Link href="/" class="text-4xl text-white font-bold">
+                    <h1>
+                        <img class="h-16" src="https://www.lovelion.me/logo.png" alt="LoveLion">
+                    </h1>
+                </Link>
 
+                <div class="flex-grow flex justify-between items-center">
                     <nav class="ml-5 space-x-4 text-lg text-gray-400">
                         <Link href="#" class="hover:text-gray-800">投資</Link>
                         <Link href="#" class="hover:text-gray-800">記帳</Link>
                     </nav>
-                </div>
 
-                <div class="flex-shrink-0 flex items-center">
                     <div class="relative h-10">
                         <button class="w-10 overflow-hidden border border-gray-400 rounded-full">
                             <img  src="https://graph.facebook.com/1918911484817617/picture?width=150&height=150" alt="Avatar">

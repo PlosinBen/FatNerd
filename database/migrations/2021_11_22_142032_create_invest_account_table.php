@@ -3,21 +3,20 @@
 use App\Contract\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateInvestUserTable extends Migration
+class CreateInvestAccountTable extends Migration
 {
-    protected $connection = 'invest';
-
-    protected $table = 'user';
+    protected $table = 'invest_account';
 
     public function handle(Blueprint $table)
     {
         $table->id();
         $table->string('alias');
         $table->foreignId('user_id');
-        $table->unique('user_id');
         $table->enum('contract', [
             'normal',
             'friend'
-        ])->nullable();
+        ])->default('normal')->nullable();
+
+        $table->unique('user_id');
     }
 }

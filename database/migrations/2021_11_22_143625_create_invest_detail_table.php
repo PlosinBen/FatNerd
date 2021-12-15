@@ -4,11 +4,9 @@ use App\Contract\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvestAccountDetailTable extends Migration
+class CreateInvestDetailTable extends Migration
 {
-    protected $connection = 'invest';
-
-    protected $table = 'account_detail';
+    protected $table = 'invest_detail';
 
     public function handle(Blueprint $table)
     {
