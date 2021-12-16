@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return \Inertia\Inertia::render('Welcome');
 });
+
+
+Route::get('/invest', [\App\Http\Controllers\InvestController::class, 'index']);
+Route::get('/invest/history', [\App\Http\Controllers\InvestController::class, 'history']);

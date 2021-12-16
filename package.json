@@ -18,11 +18,13 @@
         "axios": "^0.21",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
+        "moment": "^2.29.1",
         "postcss": "^8.1.14",
         "postcss-import": "^14.0.2",
         "postcss-nested": "^5.0.6",
         "tailwindcss": "^2.2.19",
         "vue": "^3.2.22",
         "vue-loader": "^16.8.3"
-    }
+    },
+    "dependencies": {}
 }
