@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 Route::get('/invest', [\App\Http\Controllers\InvestController::class, 'index']);
 Route::get('/invest/history', [\App\Http\Controllers\InvestController::class, 'history']);
+Route::get('/invest/futures', [\App\Http\Controllers\InvestController::class, 'futures']);

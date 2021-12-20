@@ -1,13 +1,13 @@
 <template>
     <div>
-        <ListTable :list="list" :headers="listHeaders" :columns="listColumns"/>
+        <ListTable :list="list" :headers="tableHeader" :columns="tableColumns"/>
     </div>
 </template>
 
 <script>
 import Basic from "@/Layouts/Basic"
 import ListTable from "@/Components/ListTable"
-import moment from 'moment';
+import moment from "moment"
 
 export default {
     layout: Basic,
@@ -18,16 +18,15 @@ export default {
         list: Object
     },
     setup() {
-        const listHeaders = [
+        const tableHeader = [
             '年月',
-            '入金',
-            '出金',
-            '損益',
-            '費用',
-            '結餘',
-            '備註'
+            '期末權益',
+            '未平倉損益',
+            '沖銷損益',
+            '分配總額'
         ]
-        const listColumns = [
+
+        const tableColumns = [
             {
                 class: 'text-center',
                 content(row) {
@@ -36,11 +35,11 @@ export default {
             },
             {
                 class: 'text-right',
-                content: 'deposit'
+                content: 'commitment'
             },
             {
                 class: 'text-right',
-                content: 'withdraw'
+                content: 'open_interest'
             },
             {
                 class: 'text-right',
@@ -48,20 +47,13 @@ export default {
             },
             {
                 class: 'text-right',
-                content: 'expense'
-            },
-            {
-                class: 'text-right',
-                content: 'balance'
-            },
-            {
-                content: 'note'
-            },
+                content: 'distribution'
+            }
         ]
 
         return {
-            listHeaders,
-            listColumns
+            tableHeader,
+            tableColumns
         }
     }
 }

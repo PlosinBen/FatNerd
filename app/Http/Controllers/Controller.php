@@ -15,7 +15,12 @@ class Controller extends BaseController
 
     protected $title;
 
-    private $props = [];
+    private array $props = [];
+
+    protected function subTitle(string $subtitle)
+    {
+        return $this->prop('_subTitle', $subtitle);
+    }
 
     protected function view($viewPath, $props = [])
     {

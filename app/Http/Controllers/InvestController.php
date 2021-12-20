@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\InvestHistoryResource;
+use App\Http\Resources\InvestStatementFuturesResource;
 use App\Service\InvestService;
 use Illuminate\Http\Request;
 
@@ -24,9 +25,19 @@ class InvestController extends Controller
                 )
             )
             ->view('Invest/History', [
-            'list' => InvestHistoryResource::collection(
-                app(InvestService::class)->getList()
+
+            ]);
+    }
+
+    public function futures()
+    {
+        return $this
+            ->paginationList(
+                InvestStatementFuturesResource::collection(
+                    app(InvestService::class)->getFuturesList()
+                )
             )
-        ]);
+            ->view('Invest/Futures', [
+            ]);
     }
 }
