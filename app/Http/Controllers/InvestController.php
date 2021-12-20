@@ -28,16 +28,4 @@ class InvestController extends Controller
 
             ]);
     }
-
-    public function futures()
-    {
-        return $this
-            ->paginationList(
-                InvestStatementFuturesResource::collection(
-                    app(InvestService::class)->getFuturesList()
-                )
-            )
-            ->view('Invest/Futures', [
-            ]);
-    }
 }

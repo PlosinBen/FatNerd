@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\InvestAccount::factory(10)->create();
 
-        $this->initInvest();A
+        $this->initInvest();
     }
 
     protected function initInvest()
@@ -40,6 +40,13 @@ class DatabaseSeeder extends Seeder
             'commitment' => 161506,
             'open_interest' => 12550,
             'real_commitment' => 148956
+        ]);
+
+        InvestStatementFutures::create([
+            'period' => '2018-10-01',
+            'commitment' => 241029,
+            'open_interest' => 11450,
+            'real_commitment' => 0
         ]);
     }
 }
