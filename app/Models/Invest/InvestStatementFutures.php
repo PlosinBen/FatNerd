@@ -8,6 +8,8 @@ class InvestStatementFutures extends Model
 {
     protected $table = 'invest_statement_futures';
 
+    protected $primaryKey = 'period';
+
     protected $fillable = [
         'period',
         'commitment',

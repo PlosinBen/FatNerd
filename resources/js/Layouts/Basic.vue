@@ -50,7 +50,7 @@
                     SubTitle
                 </div>
             </div>
-            <div class="flex-grow bg-white px-4 py-4 border rounded overflow-x-auto">
+            <div class="flex-grow bg-white px-4 py-4 border rounded">
                 <slot></slot>
             </div>
         </section>

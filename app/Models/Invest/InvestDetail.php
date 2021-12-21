@@ -15,4 +15,8 @@ class InvestDetail extends Model
         'amount',
         'note'
     ];
+
+    protected $casts = [
+        'occurred_at' => 'date'
+    ];
 }

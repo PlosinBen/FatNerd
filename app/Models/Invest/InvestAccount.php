@@ -12,4 +12,14 @@ class InvestAccount extends Model
         'alias',
         'contract'
     ];
+
+    public function InvestDetails()
+    {
+        return $this->hasMany(InvestDetail::class, 'invest_account_id');
+    }
+
+    public function InvestHistories()
+    {
+        return $this->hasMany(InvestHistory::class, 'invest_account_id');
+    }
 }

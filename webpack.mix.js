@@ -36,6 +36,7 @@ mix
             },
         },
     })
+    .sourceMaps()
     .version();
 
 // if (mix.inProduction()) {

@@ -23,16 +23,34 @@ class DatabaseSeeder extends Seeder
 
     protected function initInvest()
     {
-        InvestAccount::create([
+        $B = InvestAccount::create([
             'alias' => 'B',
             'user_id' => 1,
             'contract' => null
         ]);
 
-        InvestHistory::create([
+        $B->InvestDetails()->create([
+            'occurred_at' => '2018-09-01',
+            'type' => 'deposit',
+            'amount' => 148956
+        ]);
+
+        $B->InvestHistories()->create([
             'period' => '2018-09-01',
-            'invest_user_id' => 1,
-            'balance' => 148956
+            'balance' => 148956,
+            'quota' => 29
+        ]);
+
+        $A = InvestAccount::create([
+            'alias' => 'A',
+            'user_id' => null,
+            'contract' => null
+        ]);
+
+        $A->InvestDetails()->create([
+            'occurred_at' => '2018-10-20',
+            'type' => 'deposit',
+            'amount' => 100000
         ]);
 
         InvestStatementFutures::create([
@@ -40,13 +58,6 @@ class DatabaseSeeder extends Seeder
             'commitment' => 161506,
             'open_interest' => 12550,
             'real_commitment' => 148956
-        ]);
-
-        InvestStatementFutures::create([
-            'period' => '2018-10-01',
-            'commitment' => 241029,
-            'open_interest' => 11450,
-            'real_commitment' => 0
         ]);
     }
 }

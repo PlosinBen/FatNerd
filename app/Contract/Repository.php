@@ -30,7 +30,7 @@ abstract class Repository
         return $this;
     }
 
-    public function find(int $id): ?Model
+    public function find($id): ?Model
     {
         $model = $this->getModelInstance();
         if (count($this->withTables)) {
@@ -101,7 +101,7 @@ abstract class Repository
      * @param $columns
      * @return Model
      */
-    protected function insert($columns): Model
+    protected function insertModel($columns): Model
     {
         $entity = $this->setEntityColumns(
             $this->getModelInstance(),
@@ -118,7 +118,7 @@ abstract class Repository
      * @param array|Arrayable $columns
      * @return null|Model
      */
-    public function update($id, $columns): ?Model
+    protected function updateModel($id, $columns): ?Model
     {
         $entity = $id instanceof Model ? $id : $this->find($id);
 
