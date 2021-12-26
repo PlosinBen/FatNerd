@@ -4,52 +4,29 @@ namespace App\Repository\Invest;
 
 use App\Models\Invest\InvestFuturesProfit;
 use App\Models\Invest\InvestFutures;
-use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 
 class InvestFuturesProfitRepository extends \App\Contract\Repository
 {
     protected $model = InvestFuturesProfit::class;
 
-    public function insert(
-        InvestFutures $futures,
-        int           $investAccountId,
-        int           $computable,
-        int           $quota,
-        int           $profit,
-        string        $note
-    )
-    {
-        return InvestFuturesProfit::updateOrCreate([
-            'period' => $futures->period,
-            'invest_account_id' => $investAccountId
-        ], [
-            'computable' => $computable,
-            'quota' => $quota,
-            'profit' => $profit,
-        ]);
-    }
-
     /**
-     * @param array|Arrayable $futuresData
-     * @return void
+     * @param InvestFutures $investFutures
+     * @param $accountsProfitData
+     * @return mixed
      */
-    public function create($futuresData)
+    public function create($accountsProfitData)
     {
-        if ($futuresData instanceof Arrayable) {
-            $futuresData = $futuresData->toArray();
+        if ($accountsProfitData instanceof Arrayable) {
+            $accountsProfitData = $accountsProfitData->toArray();
         }
 
-        foreach ($futuresData as $index => $row) {
-            if (!$row['period'] instanceof Carbon) {
-                $row['period'] = Carbon::parse($row['period']);
-            }
+//        foreach ($accountsProfitData as $index => $row) {
+//            $accountsProfitData[$index]['invest_futures_id'] = $investFutures->id;
+//        }
 
-            $futuresData[$index]['period'] = $row['period']->format('Y-m');
-        }
-
-        return InvestFuturesProfit::upsert($futuresData, [
-            'period',
+        return InvestFuturesProfit::upsert($accountsProfitData, [
+            'invest_futures_id',
             'invest_account_id'
         ], [
             'computable',

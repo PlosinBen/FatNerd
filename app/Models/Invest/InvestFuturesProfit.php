@@ -2,6 +2,7 @@
 
 namespace App\Models\Invest;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class InvestFuturesProfit extends Model
@@ -9,24 +10,29 @@ class InvestFuturesProfit extends Model
     protected $table = 'invest_futures_profit';
 
     protected $fillable = [
-        'period',
+        'invest_futures_id',
         'invest_account_id',
         'computable',
         'quota',
         'profit'
     ];
 
-    protected $casts = [
-        'period' => 'date:Y-m'
-    ];
+    public function scopePeriod($query, $value)
+    {
+        if ($value instanceof Carbon) {
+            $value = $value->format('Y-m');
+        }
+
+        $query->where('period', $value);
+    }
 
     public function InvestFutures()
     {
-        $this->belongsTo(InvestFutures::class);
+        return $this->belongsTo(InvestFutures::class);
     }
 
     public function InvestAccount()
     {
-        $this->belongsTo(InvestAccount::class);
+        return $this->belongsTo(InvestAccount::class, 'invest_account_id', 'id');
     }
 }

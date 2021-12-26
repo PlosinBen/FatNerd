@@ -24,9 +24,14 @@ class InvestFutures extends Model
         'surplus_weight'
     ];
 
-    protected $casts = [
-        'period' => 'date:Y-m'
-    ];
+//    protected $casts = [
+//        'period' => 'date:Y-m'
+//    ];
+
+    public function getPeriodDateAttribute($period)
+    {
+        return Carbon::parse($this->period);
+    }
 
     public function InvestFuturesProfits()
     {

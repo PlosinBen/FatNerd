@@ -40,7 +40,7 @@
                 </div>
             </header>
         </section>
-        <section class="flex-grow container mx-auto flex flex-col px-4 py-3 overflow-y-auto">
+        <section class="flex-grow container mx-auto flex flex-col px-4 py-3">
             <Breadcrumbs></Breadcrumbs>
             <div class="py-3 flex items-center">
                 <h2 class="font-bold text-3xl text-coolGray-600 px-4 border-r-2">
@@ -55,7 +55,7 @@
             </div>
         </section>
         <footer class="bg-coolGray-300 border-t h-10">
-
+            123
         </footer>
     </div>
 </template>

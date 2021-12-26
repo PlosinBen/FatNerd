@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div>
-            <slot name="header"/>
-        </div>
         <slot/>
         <div class="space-x-4 py-3">
             <slot name="footer"/>
@@ -12,7 +9,10 @@
 
 <script>
 export default {
-    name: "Panel"
+    name: "Panel",
+    props: {
+        title: String
+    }
 }
 </script>
 

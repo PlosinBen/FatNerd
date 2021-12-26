@@ -1,6 +1,20 @@
 <template>
     <div>
-        <ListTable :list="list" :headers="tableHeader" :columns="tableColumns"/>
+        <ListTable
+            :list="list"
+            :headers="tableHeader"
+            :columns="tableColumns"
+            :colors="['bg-white', 'bg-gray-100']"
+        >
+            <template #column_0="{row}">
+                <InertiaLink class="border-b space-x-2" :href="`/invest/futures/${row.period}`">
+                    <span class="text-blue-600">
+                        {{ row.period }}
+                    </span>
+                    <i class="fas fa-sm fa-external-link-alt"></i>
+                </InertiaLink>
+            </template>
+        </ListTable>
     </div>
 </template>
 
@@ -23,15 +37,11 @@ export default {
             '期末權益',
             '未平倉損益',
             '沖銷損益',
-            '分配總額'
         ]
 
         const tableColumns = [
             {
                 class: 'text-center',
-                content(row) {
-                    return moment(row.period).format('YYYY-MM')
-                }
             },
             {
                 class: 'text-right',
@@ -44,10 +54,6 @@ export default {
             {
                 class: 'text-right',
                 content: 'profit'
-            },
-            {
-                class: 'text-right',
-                content: 'distribution'
             }
         ]
 

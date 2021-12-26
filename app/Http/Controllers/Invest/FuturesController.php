@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Invest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveFuturesRequest;
+use App\Http\Resources\InvestFuturesProfitResource;
 use App\Http\Resources\InvestFuturesResource;
-use App\Repository\Invest\InvestHistoryRepository;
+use App\Models\Invest\InvestFutures;
 use App\Service\InvestService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class FuturesController extends Controller
 {
@@ -22,19 +22,46 @@ class FuturesController extends Controller
                     app(InvestService::class)->getFuturesList()
                 )
             )
-            ->view('Invest/Futures', [
+            ->view('Invest/Futures/Index', [
             ]);
+    }
+
+    public function show(InvestFutures $investFutures)
+    {
+        return $this->view('Invest/Futures/Show', [
+            'investFutures' => InvestFuturesResource::make($investFutures),
+            'investFuturesProfits' => InvestFuturesProfitResource::collection(
+                $investFutures->InvestFuturesProfits->load('InvestAccount')
+            )
+        ]);
     }
 
     public function create()
     {
         return $this
-            ->view('Invest/Futures/Show', [
+            ->view('Invest/Futures/Edit', [
                 'action' => [
                     'method' => 'post',
                     'url' => route('futures.store')
                 ]
             ]);
+    }
+
+    public function edit(InvestFutures $investFutures)
+    {
+        return $this
+            ->view('Invest/Futures/Edit', [
+                'investFutures' => InvestFuturesResource::make($investFutures),
+                'action' => [
+                    'method' => 'put',
+                    'url' => route('futures.update', $investFutures->period)
+                ]
+            ]);
+    }
+
+    public function update(InvestFutures $investFutures, SaveFuturesRequest $saveFuturesRequest, InvestService $investService)
+    {
+        return $this->store($saveFuturesRequest, $investService);
     }
 
     public function store(SaveFuturesRequest $saveFuturesRequest, InvestService $investService)
@@ -45,12 +72,11 @@ class FuturesController extends Controller
             Carbon::parse($requestData->get('period')),
             $requestData->get('commitment'),
             $requestData->get('open_interest'),
-            $requestData->get('profit')
+            $requestData->get('cover_profit')
         );
 
         $investService->distributeProfit($futures);
-        dd(
-            $futures
-        );
+
+        return redirect()->route('futures.index');
     }
 }

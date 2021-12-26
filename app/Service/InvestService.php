@@ -35,19 +35,19 @@ class InvestService
         $amountPerQuota = 5000;
 
         app(InvestHistoryRepository::class)
-            ->fetchAccountsComputable($investFutures->period)
+            ->fetchAccountsComputable($investFutures->periodDate)
             ->map(fn($computable, $investAccountId) => collect([
-                'period' => $investFutures->period,
+                'invest_futures_id' => $investFutures->id,
                 'invest_account_id' => $investAccountId,
                 'computable' => $computable,
                 'quota' => floor($computable / $amountPerQuota)
             ]))
             ->pipe(function ($accountsComputed) use (&$investFutures) {
                 $prePeriodRealCommitment = app(InvestFuturesRepository::class)
-                    ->find($investFutures->period->copy()->subMonth())->real_commitment;
+                    ->find($investFutures->periodDate->copy()->subMonth())->real_commitment;
 
                 $netDepositWithdraw = app(InvestHistoryRepository::class)
-                    ->calcNetDepositWithdraw($investFutures->period);
+                    ->calcNetDepositWithdraw($investFutures->periodDate);
 
                 $profitCommitment = $investFutures->real_commitment - $netDepositWithdraw - $prePeriodRealCommitment;
 
@@ -91,18 +91,18 @@ class InvestService
 
                 return $accountsComputed;
             })
-            ->each(function (Collection $accountComputed) {
+            ->each(function (Collection $accountComputed) use ($investFutures) {
                 app(InvestHistoryRepository::class)
                     ->insertProfit(
                         $accountComputed->get('invest_account_id'),
-                        $accountComputed->get('period'),
+                        $investFutures->periodDate,
                         $accountComputed->get('profit')
                     );
 
                 app(InvestHistoryRepository::class)
                     ->updateBalance(
                         $accountComputed->get('invest_account_id'),
-                        $accountComputed->get('period')
+                        $investFutures->periodDate
                     );
             });
     }

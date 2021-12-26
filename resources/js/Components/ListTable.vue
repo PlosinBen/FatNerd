@@ -2,19 +2,25 @@
     <table class="table-auto w-full border rounded divide-y">
         <tr class="bg-blueGray-400 text-white">
             <th
-                class="py-2"
+                class="py-2 px-3"
                 v-for="header in headerSetting"
                 v-text="header.content"
             >
             </th>
         </tr>
-        <tr v-for="row in list.data">
+        <tr
+            v-for="(row, index) in list.data"
+            class="hover:bg-blue-50"
+            :class="getClass(index)"
+        >
             <td
                 class="py-1.5 px-2"
-                v-for="column in columnSetting"
+                v-for="(column, index) in columnSetting"
                 :class="column.class"
-                v-text="getContent(column.content, row)"
             >
+                <slot :name="`column_${index}`" :row="row">
+                    {{ getContent(column.content, row) }}
+                </slot>
             </td>
         </tr>
     </table>
@@ -50,9 +56,13 @@ export default {
         headers: {
             type: Array,
             default: () => []
+        },
+        colors: {
+            type: Array,
+            default: () => ['bg-white']
         }
     },
-    setup({headers, columns}) {
+    setup({headers, columns, colors}) {
         const columnSetting = columns.map((column) => {
             return typeof column === 'object' ? column : {class: '', content: column}
         })
@@ -60,10 +70,12 @@ export default {
             return typeof header === 'object' ? header : {class: '', content: header}
         })
 
+        const colorCount = colors.length
 
         return {
             headerSetting,
-            columnSetting
+            columnSetting,
+            colorCount
         }
     },
     data() {
@@ -73,7 +85,10 @@ export default {
     },
     methods: {
         getContent(content, row) {
-            return {}.toString.call(content) === '[object Function]' ? content(row): row[content]
+            return {}.toString.call(content) === '[object Function]' ? content(row) : row[content]
+        },
+        getClass(index) {
+            return this.colors[index % this.colorCount];
         }
     }
 }

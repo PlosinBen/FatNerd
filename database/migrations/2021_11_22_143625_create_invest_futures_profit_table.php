@@ -11,7 +11,7 @@ class CreateInvestFuturesProfitTable extends Migration
     public function handle(Blueprint $table)
     {
         $table->id();
-        $table->char('period', 7);
+        $table->foreignId('invest_futures_id');
         $table->foreignId('invest_account_id');
         $table->decimal('computable', 10, 2)
             ->default(0)
@@ -20,6 +20,6 @@ class CreateInvestFuturesProfitTable extends Migration
             ->comment('權重');
         $table->decimal('profit');
 
-        $table->unique(['period', 'invest_account_id'], 'unique_futures_account');
+        $table->unique(['invest_futures_id', 'invest_account_id'], 'unique_futures_account');
     }
 }

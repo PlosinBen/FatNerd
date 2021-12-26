@@ -40,7 +40,7 @@ class SaveFuturesRequest extends FormRequest
                 'required',
                 'numeric'
             ],
-            'profit' => [
+            'cover_profit' => [
                 'required',
                 'numeric'
             ]
