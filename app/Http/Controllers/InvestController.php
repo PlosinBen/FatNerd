@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\InvestHistoryResource;
-use App\Http\Resources\InvestStatementFuturesResource;
+use App\Http\Resources\InvestFuturesResource;
 use App\Service\InvestService;
 use Illuminate\Http\Request;
 

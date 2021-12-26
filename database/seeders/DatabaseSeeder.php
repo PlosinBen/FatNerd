@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Invest\InvestAccount;
 use App\Models\Invest\InvestHistory;
-use App\Models\Invest\InvestStatementFutures;
+use App\Models\Invest\InvestFutures;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,38 +23,33 @@ class DatabaseSeeder extends Seeder
 
     protected function initInvest()
     {
-        $B = InvestAccount::create([
+        InvestAccount::create([
             'alias' => 'B',
             'user_id' => 1,
             'contract' => null
-        ]);
-
-        $B->InvestDetails()->create([
-            'occurred_at' => '2018-09-01',
-            'type' => 'deposit',
-            'amount' => 148956
-        ]);
-
-        $B->InvestHistories()->create([
-            'period' => '2018-09-01',
-            'balance' => 148956,
-            'quota' => 29
-        ]);
+        ])
+            ->InvestHistories()->create([
+                'occurred_at' => '2018-09-01',
+                'type' => 'deposit',
+                'amount' => 148956,
+                'balance' => 148956,
+            ]);
 
         $A = InvestAccount::create([
             'alias' => 'A',
             'user_id' => null,
             'contract' => null
-        ]);
+        ])
+            ->InvestHistories()->create([
+                'occurred_at' => '2018-10-20',
+                'type' => 'deposit',
+                'amount' => 100000,
+                'balance' => 100000,
+            ]);
 
-        $A->InvestDetails()->create([
-            'occurred_at' => '2018-10-20',
-            'type' => 'deposit',
-            'amount' => 100000
-        ]);
 
-        InvestStatementFutures::create([
-            'period' => '2018-09-01',
+        InvestFutures::create([
+            'period' => '2018-09',
             'commitment' => 161506,
             'open_interest' => 12550,
             'real_commitment' => 148956

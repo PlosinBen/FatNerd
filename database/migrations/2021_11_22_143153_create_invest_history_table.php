@@ -11,16 +11,20 @@ class CreateInvestHistoryTable extends Migration
     public function handle(Blueprint $table)
     {
         $table->id();
-        $table->date('period');
         $table->foreignId('invest_account_id');
-        $table->decimal('deposit', 10, 2)->default(0);
-        $table->decimal('withdraw', 10, 2)->default(0);
-        $table->decimal('profit', 10, 2)->default(0);
-        $table->decimal('transfer', 10, 2)->default(0);
-        $table->decimal('expense', 10, 2)->default(0);
-        $table->decimal('balance', 10, 2)->default(0);
-        $table->smallInteger('quota')->unsigned()->default(0);
+        $table->date('occurred_at')
+            ->comment('帳務日期');
 
-        $table->unique(['invest_account_id', 'period']);
+        $table->enum('type', ['deposit', 'withdraw', 'profit', 'expense', 'transfer'])
+            ->comment('入帳類型');
+        $table->decimal('amount', 10, 2)
+            ->comment('入帳金額');
+        $table->decimal('balance', 10, 2)
+            ->comment('結餘金額');
+
+        $table->string('note')
+            ->default('');
+
+        $table->index(['invest_account_id', 'occurred_at']);
     }
 }

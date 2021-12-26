@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Invest\InvestStatementFutures;
+use App\Models\Invest\InvestFutures;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,9 +30,7 @@ class SaveFuturesRequest extends FormRequest
                 'required',
                 'date_format:Y-m',
                 'before:now',
-                'after:2018-09',
-                Rule::unique(InvestStatementFutures::class, 'period')
-                    ->ignore($this->route('futures'))
+                'after:2018-09'
             ],
             'commitment' => [
                 'required',

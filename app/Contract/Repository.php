@@ -44,7 +44,7 @@ abstract class Repository
      * @param array|Arrayable $columns
      * @return Collection
      */
-    public function fetch($columns): Collection
+    public function fetch($columns = []): Collection
     {
         return $this->modelSetFilter($columns)->get();
     }
@@ -53,7 +53,7 @@ abstract class Repository
      * @param array|Arrayable $columns
      * @return LengthAwarePaginator
      */
-    public function fetchPagination($columns): LengthAwarePaginator
+    public function fetchPagination($columns = []): LengthAwarePaginator
     {
         return $this->modelSetFilter($columns)
             ->paginate($this->perPage);

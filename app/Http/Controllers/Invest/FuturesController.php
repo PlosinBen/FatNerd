@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Invest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveFuturesRequest;
-use App\Http\Resources\InvestStatementFuturesResource;
+use App\Http\Resources\InvestFuturesResource;
+use App\Repository\Invest\InvestHistoryRepository;
 use App\Service\InvestService;
-use App\Service\StatementService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class FuturesController extends Controller
     {
         return $this
             ->paginationList(
-                InvestStatementFuturesResource::collection(
+                InvestFuturesResource::collection(
                     app(InvestService::class)->getFuturesList()
                 )
             )
@@ -48,6 +48,7 @@ class FuturesController extends Controller
             $requestData->get('profit')
         );
 
+        $investService->distributeProfit($futures);
         dd(
             $futures
         );

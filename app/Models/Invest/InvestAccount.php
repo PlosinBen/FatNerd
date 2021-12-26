@@ -13,13 +13,13 @@ class InvestAccount extends Model
         'contract'
     ];
 
-    public function InvestDetails()
+    public function InvestProfits()
     {
-        return $this->hasMany(InvestDetail::class, 'invest_account_id');
+        return $this->hasMany(InvestFuturesProfit::class);
     }
 
     public function InvestHistories()
     {
-        return $this->hasMany(InvestHistory::class, 'invest_account_id');
+        return $this->hasMany(InvestHistory::class);
     }
 }
