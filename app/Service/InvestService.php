@@ -18,16 +18,16 @@ class InvestService
         $this->investHistoryRepository = $investHistoryRepository;
     }
 
-    public function getList()
+    public function getList($filter = [])
     {
         return $this->investHistoryRepository
-            ->fetchPagination([]);
+            ->fetchPagination(['orderBy' => 'period Desc'] + $filter);
     }
 
-    public function getFuturesList()
+    public function getFuturesList($filter = [])
     {
         return app(InvestFuturesRepository::class)
-            ->fetchPagination([]);
+            ->fetchPagination(['orderBy' => 'period Desc'] + $filter);
     }
 
     public function distributeProfit(InvestFutures $investFutures)

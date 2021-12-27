@@ -79,14 +79,14 @@ abstract class Repository
                 $orderColumn = explode(' ', trim($orderColumn));
                 $orderColumn[1] = strtolower($orderColumn[1]) === 'desc' ? 'DESC' : 'ASC';
 
-                $model->orderBy(parseSnakeCase($orderColumn[0]), $orderColumn[1]);
+                $model = $model->orderBy(parseSnakeCase($orderColumn[0]), $orderColumn[1]);
             }
         }
 
         $columns->map(function ($value, $scopeName) use (&$model) {
             $scopeName = parseCameCase($scopeName);
             if (method_exists($model, 'scope' . ucfirst($scopeName))) {
-                call_user_func([$model, $scopeName], $value);
+                $model = call_user_func([$model, $scopeName], $value);
             }
         });
 

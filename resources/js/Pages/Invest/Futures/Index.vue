@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div class="space-y-3">
+        <div>
+            <InertiaLink class="btn-green" href="/invest/futures/create">新增對帳單</InertiaLink>
+        </div>
         <ListTable
             :list="list"
             :headers="tableHeader"
@@ -11,7 +14,7 @@
                     <span class="text-blue-600">
                         {{ row.period }}
                     </span>
-                    <i class="fas fa-sm fa-external-link-alt"></i>
+                    <i class="hidden fas fa-sm fa-external-link-alt"></i>
                 </InertiaLink>
             </template>
         </ListTable>
