@@ -7,6 +7,7 @@ use App\Http\Requests\SaveFuturesRequest;
 use App\Http\Resources\InvestFuturesProfitResource;
 use App\Http\Resources\InvestFuturesResource;
 use App\Models\Invest\InvestFutures;
+use App\Service\FuturesService;
 use App\Service\InvestService;
 use Carbon\Carbon;
 
@@ -19,16 +20,16 @@ class FuturesController extends Controller
         return $this
             ->paginationList(
                 InvestFuturesResource::collection(
-                    app(InvestService::class)->getFuturesList()
+                    app(FuturesService::class)->getList()
                 )
             )
-            ->view('Invest/Futures/Index', [
+            ->view('Futures/Index', [
             ]);
     }
 
     public function show(InvestFutures $investFutures)
     {
-        return $this->view('Invest/Futures/Show', [
+        return $this->view('Futures/Show', [
             'investFutures' => InvestFuturesResource::make($investFutures),
             'investFuturesProfits' => InvestFuturesProfitResource::collection(
                 $investFutures->InvestFuturesProfits->load('InvestAccount')
@@ -39,7 +40,7 @@ class FuturesController extends Controller
     public function create()
     {
         return $this
-            ->view('Invest/Futures/Edit', [
+            ->view('Futures/Edit', [
                 'action' => [
                     'method' => 'post',
                     'url' => route('futures.store')
@@ -50,7 +51,7 @@ class FuturesController extends Controller
     public function edit(InvestFutures $investFutures)
     {
         return $this
-            ->view('Invest/Futures/Edit', [
+            ->view('Futures/Edit', [
                 'investFutures' => InvestFuturesResource::make($investFutures),
                 'action' => [
                     'method' => 'put',

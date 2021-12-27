@@ -10,7 +10,7 @@
             :colors="['bg-white', 'bg-gray-100']"
         >
             <template #column_0="{row}">
-                <InertiaLink class="border-b space-x-2" :href="`/invest/futures/${row.period}`">
+                <InertiaLink class="border-b space-x-2" :href="`/futures/${row.period}`">
                     <span class="text-blue-600">
                         {{ row.period }}
                     </span>

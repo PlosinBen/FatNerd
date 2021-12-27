@@ -11,7 +11,7 @@
                 <div class="flex-grow flex justify-between items-center">
                     <nav class="ml-5 space-x-4 text-lg text-gray-400">
                         <InertiaLink href="/invest" class="hover:text-gray-800">投資</InertiaLink>
-                        <InertiaLink href="/invest/futures" class="hover:text-gray-800">對帳單</InertiaLink>
+                        <InertiaLink href="/futures" class="hover:text-gray-800">對帳單</InertiaLink>
                         <InertiaLink href="#" class="hover:text-gray-800">記帳</InertiaLink>
                     </nav>
 
