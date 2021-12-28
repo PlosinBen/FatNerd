@@ -13,19 +13,21 @@ class InvestController extends Controller
 
     public function index()
     {
-
-    }
-
-    public function history()
-    {
         return $this
-            ->paginationList(
-                InvestHistoryResource::collection(
-                    app(InvestService::class)->getList()
-                )
-            )
-            ->view('Invest/History', [
-
+            ->view('Invest/Index', [
+                'investRecords' => app(InvestService::class)->getList(1)
+                    ->mapToGroups(function ($investHistory) {
+                        return [
+                            $investHistory->occurred_at->format('Y-m') => $investHistory
+                        ];
+                    })
+                    ->map(function ($monthHistories) {
+                        return $monthHistories
+                            ->groupBy('type')
+                            ->map(fn($groupHistories) => $groupHistories->sum('amount'))
+                            ->put('balance', (int)$monthHistories->first()->balance)
+                            ->put('detail', $monthHistories);
+                    })
             ]);
     }
 }

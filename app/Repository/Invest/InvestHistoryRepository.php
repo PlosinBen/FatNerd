@@ -12,6 +12,14 @@ class InvestHistoryRepository extends Repository
 {
     protected $model = InvestHistory::class;
 
+    public function fetchByAccount(int $investAccountId)
+    {
+        return $this->fetch([
+            'orderBy' => 'occurred_at DESC,id DESC',
+            'invest_account_id' => $investAccountId
+        ]);
+    }
+
     public function fetchAccountsComputable(Carbon $period)
     {
         $prePeriod = $period->copy()->subMonth();

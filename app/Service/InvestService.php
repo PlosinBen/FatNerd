@@ -18,9 +18,9 @@ class InvestService
         $this->investHistoryRepository = $investHistoryRepository;
     }
 
-    public function getList($filter = [])
+    public function getList(int $investAccountId)
     {
         return $this->investHistoryRepository
-            ->fetchPagination(['orderBy' => 'period Desc'] + $filter);
+            ->fetchByAccount($investAccountId);
     }
 }
