@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveInvestRequest;
 use App\Http\Resources\InvestAccountResource;
-use App\Http\Resources\InvestHistoryResource;
-use App\Http\Resources\InvestFuturesResource;
-use App\Models\Invest\InvestHistory;
 use App\Repository\Invest\InvestAccountRepository;
 use App\Service\InvestService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class InvestController extends Controller
 {

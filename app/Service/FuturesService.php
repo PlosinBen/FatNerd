@@ -17,6 +17,12 @@ class FuturesService
             ->fetchPagination(['orderBy' => 'period Desc'] + $filter);
     }
 
+    public function get(Carbon $period)
+    {
+        return app()->make(InvestFuturesRepository::class)
+            ->find($period);
+    }
+
     public function createFutures(Carbon $period, int $commitment, int $openInterest, int $profit)
     {
         return app()->make(InvestFuturesRepository::class)
