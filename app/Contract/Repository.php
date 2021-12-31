@@ -85,7 +85,7 @@ abstract class Repository
 
         $columns->map(function ($value, $scopeName) use (&$model) {
             $scopeName = parseCameCase($scopeName);
-            if (method_exists($model, 'scope' . ucfirst($scopeName))) {
+            if (method_exists($this->model, 'scope' . ucfirst($scopeName))) {
                 $model = call_user_func([$model, $scopeName], $value);
             }
         });

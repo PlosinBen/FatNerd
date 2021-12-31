@@ -1,7 +1,7 @@
 <template>
     <div class="space-y-3">
         <div>
-            <InertiaLink class="btn-green" href="/invest/futures/create">新增對帳單</InertiaLink>
+            <InertiaLink class="btn-green" href="/futures/create">新增對帳單</InertiaLink>
         </div>
         <ListTable
             :list="list"

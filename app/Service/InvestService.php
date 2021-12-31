@@ -2,12 +2,8 @@
 
 namespace App\Service;
 
-use App\Models\Invest\InvestFutures;
-use App\Repository\Invest\InvestFuturesProfitRepository;
 use App\Repository\Invest\InvestHistoryRepository;
-use App\Repository\Invest\InvestFuturesRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 class InvestService
 {
@@ -22,5 +18,18 @@ class InvestService
     {
         return $this->investHistoryRepository
             ->fetchByAccount($investAccountId);
+    }
+
+    public function create(int $investAccountId, Carbon $occurredAt, string $type, int $amount, ?string $note)
+    {
+        $this->investHistoryRepository->insert(
+            $occurredAt,
+            $investAccountId,
+            $type,
+            $amount,
+            $note ?? ''
+        );
+
+        $this->investHistoryRepository->updateBalance($investAccountId, $occurredAt);
     }
 }

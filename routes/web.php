@@ -18,8 +18,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/invest', [\App\Http\Controllers\InvestController::class, 'index']);
-Route::get('/invest/history', [\App\Http\Controllers\InvestController::class, 'history']);
+Route::resource('/invest', \App\Http\Controllers\InvestController::class);
 
 Route::resource('/futures', \App\Http\Controllers\Invest\FuturesController::class)
     ->parameter('futures', 'investFutures');

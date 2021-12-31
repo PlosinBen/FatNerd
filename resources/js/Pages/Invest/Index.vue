@@ -1,5 +1,6 @@
 <template>
     <div>
+        <InertiaLink class="btn-green" href="/invest/create">新增紀錄</InertiaLink>
         <table class="table-fixed w-full border rounded divide-y text-center">
             <tr class="bg-coolGray-400 text-white">
                 <th class="py-1.5">年月</th>

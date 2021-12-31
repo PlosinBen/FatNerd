@@ -60,23 +60,23 @@ class FuturesController extends Controller
             ]);
     }
 
-    public function update(InvestFutures $investFutures, SaveFuturesRequest $saveFuturesRequest, InvestService $investService)
+    public function update(InvestFutures $investFutures, SaveFuturesRequest $saveFuturesRequest, FuturesService $investService)
     {
         return $this->store($saveFuturesRequest, $investService);
     }
 
-    public function store(SaveFuturesRequest $saveFuturesRequest, InvestService $investService)
+    public function store(SaveFuturesRequest $saveFuturesRequest, FuturesService $futuresService)
     {
         $requestData = $saveFuturesRequest->safe()->collect();
 
-        $futures = $investService->createFutures(
+        $futures = $futuresService->createFutures(
             Carbon::parse($requestData->get('period')),
             $requestData->get('commitment'),
             $requestData->get('open_interest'),
             $requestData->get('cover_profit')
         );
 
-        $investService->distributeProfit($futures);
+        $futuresService->distributeProfit($futures);
 
         return redirect()->route('futures.index');
     }

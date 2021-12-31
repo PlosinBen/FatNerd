@@ -19,13 +19,13 @@ class FuturesService
 
     public function createFutures(Carbon $period, int $commitment, int $openInterest, int $profit)
     {
-        return app(InvestFuturesRepository::class)
+        return app()->make(InvestFuturesRepository::class)
             ->insert(
                 $period,
                 $commitment,
                 $openInterest,
                 $profit
-            );
+            )->refresh();
     }
 
     public function distributeProfit(InvestFutures $investFutures)
@@ -51,7 +51,7 @@ class FuturesService
 
                 $totalQuota = $accountsComputed->sum('quota');
 
-                $profit = $investFutures->cover_profit === 0 ? $profitCommitment : min($profitCommitment, $investFutures->cover_profit);
+                $profit = $investFutures->cover_profit == 0 ? $profitCommitment : min($profitCommitment, $investFutures->cover_profit);
 
                 $profitPerQuota = floor($profit / $totalQuota);
 

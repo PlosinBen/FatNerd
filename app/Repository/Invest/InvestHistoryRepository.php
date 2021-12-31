@@ -27,8 +27,10 @@ class InvestHistoryRepository extends Repository
         return $this->getModelInstance()
             ->period($prePeriod)
             ->orderBy('occurred_at', 'desc')
+            ->orderByRaw("FIELD(type, 'expense', 'profit')")
             ->get()
-            ->pluck('balance', 'invest_account_id');
+            ->groupBy('invest_account_id')
+            ->map(fn($investAccountRecords) => $investAccountRecords->first()->balance);
     }
 
     public function calcNetDepositWithdraw(Carbon $period)
@@ -41,11 +43,12 @@ class InvestHistoryRepository extends Repository
 
     public function insert(Carbon $period, int $investAccountId, string $type, int $amount, string $note)
     {
-        $this->insertModel([
+        return $this->insertModel([
             'invest_account_id' => $investAccountId,
             'occurred_at' => $period,
             'type' => $type,
             'amount' => $amount,
+            'balance' => 0,
             'note' => $note
         ]);
     }
