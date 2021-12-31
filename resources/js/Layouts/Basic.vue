@@ -43,11 +43,11 @@
         <section class="flex-grow container mx-auto flex flex-col px-4 py-3">
             <Breadcrumbs></Breadcrumbs>
             <div class="py-3 flex items-center">
-                <h2 class="font-bold text-3xl text-coolGray-600 px-4 border-r-2">
-                    Page Title
+                <h2 class="font-bold text-3xl text-coolGray-600 px-4">
+                    {{ title }}
                 </h2>
-                <div class="text-2xl px-4">
-                    SubTitle
+                <div v-if="subTitle" class="text-2xl px-4 border-l-2">
+                    {{ subTitle }}
                 </div>
             </div>
             <div class="flex-grow bg-white px-4 py-4 border rounded">
@@ -69,12 +69,26 @@ export default {
         Breadcrumbs
     },
     data() {
+        console.log(
+            this.$page.props,
+        )
+
         return {
+            title: undefined,
+            subTitle: undefined,
             menu: [
                 ['投資', '#'],
                 ['記帳', '#']
             ]
         }
+    },
+    methods: {
+        loadProps() {
+            this.title = this.$page.props._title
+        }
+    },
+    beforeMount() {
+        this.loadProps()
     }
 }
 </script>

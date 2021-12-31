@@ -15,6 +15,7 @@ class InvestController extends Controller
     public function index()
     {
         return $this
+            ->title('歷史權益')
             ->view('Invest/Index', [
                 'investRecords' => app(InvestService::class)->getList(1)
                     ->mapToGroups(function ($investHistory) {

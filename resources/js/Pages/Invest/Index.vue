@@ -126,6 +126,9 @@ export default {
     props: {
         investRecords: Object
     },
+    mounted() {
+        this.props
+    },
     setup() {
         const listHeaders = [
             '年月',

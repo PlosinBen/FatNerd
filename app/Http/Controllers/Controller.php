@@ -15,6 +15,8 @@ class Controller extends BaseController
 
     protected $title;
 
+//    protected $subTitle;
+
     private array $props = [];
 
     protected function subTitle(string $subtitle)
@@ -24,7 +26,11 @@ class Controller extends BaseController
 
     protected function view($viewPath, $props = [])
     {
-        return Inertia::render($viewPath, $props + $this->props);
+        return Inertia::render($viewPath,
+            $props +
+            array_filter($this->props) +
+            array_filter(['_title' => $this->title])
+        );
     }
 
     protected function prop($name, $value)
@@ -32,6 +38,12 @@ class Controller extends BaseController
         $this->props[$name] = $value;
 
         return $this;
+    }
+
+    protected function title($title, $subTitle = null)
+    {
+        return $this->prop('_title', $title)
+            ->prop('_subTitle', $subTitle);
     }
 
     protected function paginationList(JsonResource $jsonResource)
