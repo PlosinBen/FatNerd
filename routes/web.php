@@ -24,3 +24,7 @@ Route::resource('/invest', \App\Http\Controllers\InvestController::class);
 
 Route::resource('/futures', \App\Http\Controllers\Invest\FuturesController::class)
     ->parameter('futures', 'investFutures');
+
+Route::group(['prefix' => '/about'], function () {
+    Route::get('privacy', [\App\Http\Controllers\AboutController::class, 'privacy']);
+});

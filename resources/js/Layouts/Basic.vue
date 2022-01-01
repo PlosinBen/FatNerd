@@ -17,7 +17,7 @@
 
                     <div class="relative h-10">
                         <button class="w-10 overflow-hidden border border-gray-400 rounded-full">
-                            <img  src="https://graph.facebook.com/1918911484817617/picture?width=150&height=150" alt="Avatar">
+                            <img src="https://graph.facebook.com/1918911484817617/picture?width=150&height=150" alt="Avatar">
                         </button>
                         <ul v-if="false" class="absolute right-0 bg-white space-y border shadow rounded">
                             <li>
@@ -54,19 +54,19 @@
                 <slot></slot>
             </div>
         </section>
-        <footer class="bg-coolGray-300 border-t h-10">
-            123
-        </footer>
+        <Footer/>
     </div>
 </template>
 
 <script>
 import Breadcrumbs from "@/Components/LayoutPartial/Breadcrumbs";
+import Footer from "@/Components/LayoutPartial/Footer";
 
 export default {
     name: "Basic",
     components: {
-        Breadcrumbs
+        Breadcrumbs,
+        Footer
     },
     data() {
         console.log(
