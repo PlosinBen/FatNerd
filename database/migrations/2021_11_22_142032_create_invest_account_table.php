@@ -13,6 +13,8 @@ class CreateInvestAccountTable extends Migration
         $table->string('alias');
         $table->foreignId('user_id')
             ->nullable();
+        $table->unsignedSmallInteger('start_year_at')
+            ->default(0);
         $table->enum('contract', [
             'normal',
             'friend'

@@ -14,9 +14,18 @@ class InvestController extends Controller
 
     public function index()
     {
+        $year = 2018;
+
         return $this
             ->title('歷史權益')
             ->view('Invest/Index', [
+                'year' => 2018,
+                'investYears' => [
+                    2021,
+                    2020,
+                    2019,
+                    2018
+                ],
                 'investRecords' => app(InvestService::class)->getList(1)
                     ->mapToGroups(function ($investHistory) {
                         return [

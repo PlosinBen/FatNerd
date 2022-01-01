@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
         InvestAccount::create([
             'alias' => 'B',
             'user_id' => 1,
-            'contract' => null
+            'contract' => null,
+            'start_year_at' => 2018,
         ])
             ->InvestHistories()->create([
                 'occurred_at' => '2018-09-01',
@@ -38,7 +39,8 @@ class DatabaseSeeder extends Seeder
         $A = InvestAccount::create([
             'alias' => 'A',
             'user_id' => null,
-            'contract' => null
+            'contract' => null,
+            'start_year_at' => 2018,
         ])
             ->InvestHistories()->create([
                 'occurred_at' => '2018-10-20',

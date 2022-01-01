@@ -1,88 +1,50 @@
 <template>
-    <div>
-        <InertiaLink class="btn-green" href="/invest/create">新增紀錄</InertiaLink>
-        <div class="border border-t-0 divide-y">
-            <div class="hidden sm:flex text-center py-1.5 border-t bg-coolGray-400 text-white">
-                <div class="w-1/6">年月</div>
-                <div class="w-1/6">入金</div>
-                <div class="w-1/6">出金</div>
-                <div class="w-1/6">損益</div>
-                <div class="w-1/6">費用</div>
-                <div class="w-1/6">結餘</div>
-            </div>
-            <div
-                class="flex flex-wrap py-1.5 text-right"
-                v-for="(investRecord, period) in investRecords"
-            >
-                <div class="w-full sm:w-1/6 flex items-center justify-center">
-                    <button class="border-b hover:text-sky-500" @click.stop="showDetail(investRecord.detail)">
-                        {{ period }}
-                        <i class="fas fa-external-link-alt pl-0.5 fa-xs"></i>
-                    </button>
-                </div>
-                <div class="w-5/12 sm:hidden py-0.5 text-center">入金</div>
-                <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.deposit || 0"></div>
-                <div class="w-5/12 sm:hidden py-0.5 text-center">出金</div>
-                <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.withdraw || 0"></div>
-                <div class="w-5/12 sm:hidden py-0.5 text-center">損益</div>
-                <div
-                    class="w-7/12 sm:w-1/6 py-0.5 px-3"
-                    :class="profitClass('profit', investRecord.profit)"
-                    v-text="investRecord.profit || 0"
-                ></div>
-                <div class="w-5/12 sm:hidden py-0.5 text-center">費用</div>
-                <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.expense || 0"></div>
-                <div class="w-5/12 sm:hidden py-0.5 text-center">結餘</div>
-                <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.balance || 0"></div>
-            </div>
-        </div>
+    <InertiaLink class="btn-green" href="/invest/create">新增紀錄</InertiaLink>
 
-        <table v-if="0" class="table-fixed w-full border rounded divide-y text-center">
-            <tr class="bg-coolGray-400 text-white">
-                <th class="py-1.5">年月</th>
-                <th>入金</th>
-                <th>出金</th>
-                <th>損益</th>
-                <th>費用</th>
-                <th>結餘</th>
-            </tr>
-            <template v-for="(investRecord, period) in investRecords">
-                <tr>
-                    <td class="px-3 py-2.5" v-text="period"></td>
-                    <td class="px-3 py-2.5" v-text="investRecord.deposit || 0"></td>
-                    <td class="px-3 py-2.5" v-text="investRecord.withdraw || 0"></td>
-                    <td
-                        class="px-3 py-2.5"
-                        :class="profitClass('profit', investRecord.profit)"
-                        v-text="investRecord.profit || 0"
-                    ></td>
-                    <td class="px-3 py-2.5" v-text="investRecord.expense || 0"></td>
-                    <td class="px-3 py-2.5" v-text="investRecord.balance || 0"></td>
-                </tr>
-                <tr>
-                    <td colspan="6" class="p-3">
-                        <table class="table-fixed text-center w-full divide-y">
-                            <tr>
-                                <th class="py-1.5 w-40">日期</th>
-                                <th class="py-1.5 w-32">類型</th>
-                                <th class="py-1.5 w-40">金額</th>
-                                <th class="py-1.5">備註</th>
-                            </tr>
-                            <tr v-for="record in investRecord.detail">
-                                <td class="px-3 py-2" v-text="record.occurred_at"></td>
-                                <td class="px-3 py-2" v-text="typeText[record.type]"></td>
-                                <td
-                                    class="px-3 py-2 text-right"
-                                    :class="profitClass(record.type, record.amount)"
-                                    v-text="record.amount"
-                                ></td>
-                                <td class="px-3 py-2" v-text="record.note"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </template>
-        </table>
+    <FormRow v-if="investYears.length > 1" label="年分">
+        <select v-model="year">
+            <option
+                v-for="investYear in investYears"
+                :value="investYear"
+                v-text="investYear"
+            ></option>
+        </select>
+    </FormRow>
+
+    <div class="border border-t-0 divide-y">
+        <div class="hidden sm:flex text-center py-1.5 border-t bg-coolGray-400 text-white">
+            <div class="w-1/6">年月</div>
+            <div class="w-1/6">入金</div>
+            <div class="w-1/6">出金</div>
+            <div class="w-1/6">損益</div>
+            <div class="w-1/6">費用</div>
+            <div class="w-1/6">結餘</div>
+        </div>
+        <div
+            class="flex flex-wrap py-1.5 text-right"
+            v-for="(investRecord, period) in investRecords"
+        >
+            <div class="w-full sm:w-1/6 flex items-center justify-center">
+                <button class="border-b hover:text-sky-500" @click.stop="showDetail(investRecord.detail)">
+                    {{ period }}
+                    <i class="fas fa-external-link-alt pl-0.5 fa-xs"></i>
+                </button>
+            </div>
+            <div class="w-5/12 sm:hidden py-0.5 text-center">入金</div>
+            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.deposit || 0"></div>
+            <div class="w-5/12 sm:hidden py-0.5 text-center">出金</div>
+            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.withdraw || 0"></div>
+            <div class="w-5/12 sm:hidden py-0.5 text-center">損益</div>
+            <div
+                class="w-7/12 sm:w-1/6 py-0.5 px-3"
+                :class="profitClass('profit', investRecord.profit)"
+                v-text="investRecord.profit || 0"
+            ></div>
+            <div class="w-5/12 sm:hidden py-0.5 text-center">費用</div>
+            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.expense || 0"></div>
+            <div class="w-5/12 sm:hidden py-0.5 text-center">結餘</div>
+            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.balance || 0"></div>
+        </div>
     </div>
 
     <Modal v-model="show">
@@ -114,7 +76,7 @@ import Basic from "@/Layouts/Basic"
 import ListTable from "@/Components/ListTable"
 import {FormRow} from "@/Components/Form"
 import Modal from "@/Components/Modal"
-import moment from 'moment';
+import moment from 'moment'
 
 export default {
     layout: Basic,
@@ -124,6 +86,8 @@ export default {
         Modal
     },
     props: {
+        year: Number,
+        investYears: Array,
         investRecords: Object
     },
     mounted() {
@@ -182,7 +146,12 @@ export default {
         return {
             listHeaders,
             listColumns,
-            typeText
+            typeText,
+        }
+    },
+    watch: {
+        year() {
+            this.$inertia.get(`?year=${this.year}`)
         }
     },
     data() {
