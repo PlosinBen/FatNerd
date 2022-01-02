@@ -12,21 +12,26 @@ class InvestController extends Controller
 {
     protected $title = '投資';
 
-    public function index()
+    public function index(InvestService $investService)
     {
-        $year = 2018;
+        auth()->loginUsingId(2);
+
+        $investAccountId = auth()->id();
+
+        $year = (int)request()->get('year');
+
+        $years = $investService->getYears($investAccountId);
+
+        if (!$years->contains($year)) {
+            $year = $years->first();
+        }
 
         return $this
             ->title('歷史權益')
             ->view('Invest/Index', [
-                'year' => 2018,
-                'investYears' => [
-                    2021,
-                    2020,
-                    2019,
-                    2018
-                ],
-                'investRecords' => app(InvestService::class)->getList(1)
+                'year' => $year,
+                'investYears' => $years,
+                'investRecords' => $investService->getListByYear($investAccountId, $year)
                     ->mapToGroups(function ($investHistory) {
                         return [
                             $investHistory->occurred_at->format('Y-m') => $investHistory

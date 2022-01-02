@@ -12,11 +12,12 @@ class InvestHistoryRepository extends Repository
 {
     protected $model = InvestHistory::class;
 
-    public function fetchByAccount(int $investAccountId)
+    public function fetchByAccount(int $investAccountId, int $year)
     {
         return $this->fetch([
             'orderBy' => 'occurred_at DESC,id DESC',
-            'invest_account_id' => $investAccountId
+            'invest_account_id' => $investAccountId,
+            'year' => $year
         ]);
     }
 
@@ -137,5 +138,15 @@ class InvestHistoryRepository extends Repository
                 $investHistory->balance = $balance = $balance + $investHistory->amount;
                 $investHistory->save();
             });
+    }
+
+    public function fetchOccurredYears(int $investAccountId)
+    {
+        return $this->getModelInstance()
+            ->investAccountId($investAccountId)
+            ->groupByRaw('year(occurred_at)')
+            ->selectRaw('year(occurred_at) as year')
+            ->get()
+            ->pluck('year');
     }
 }

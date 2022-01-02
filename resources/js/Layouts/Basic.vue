@@ -11,11 +11,11 @@
                 <div class="flex-grow flex justify-between items-center">
                     <nav class="ml-5 space-x-4 text-lg text-gray-400">
                         <InertiaLink href="/invest" class="hover:text-gray-800">投資</InertiaLink>
-                        <InertiaLink href="/futures" class="hover:text-gray-800">對帳單</InertiaLink>
-                        <InertiaLink href="#" class="hover:text-gray-800">記帳</InertiaLink>
+                        <InertiaLink v-if="this.$page.props.isAdmin" href="/futures" class="hover:text-gray-800">對帳單</InertiaLink>
+                        <InertiaLink v-if="false" href="#" class="hover:text-gray-800">記帳</InertiaLink>
                     </nav>
 
-                    <div class="relative h-10">
+                    <div v-if="false" class="relative h-10">
                         <button class="w-10 overflow-hidden border border-gray-400 rounded-full">
                             <img src="https://graph.facebook.com/1918911484817617/picture?width=150&height=150" alt="Avatar">
                         </button>
@@ -54,7 +54,7 @@
                 <slot></slot>
             </div>
         </section>
-        <Footer/>
+        <Footer v-if="false"/>
     </div>
 </template>
 

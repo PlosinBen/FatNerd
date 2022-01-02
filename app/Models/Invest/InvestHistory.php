@@ -32,6 +32,11 @@ class InvestHistory extends Model
         $query->where('occurred_at', 'like', $value->format('Y-m%'));
     }
 
+    public function scopeYear($query, $value)
+    {
+        $query->where('occurred_at', 'like', "{$value}%");
+    }
+
     public function scopeInvestAccountId($query, $value)
     {
         $query->where('invest_account_id', $value);

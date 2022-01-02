@@ -1,5 +1,5 @@
 <template>
-    <InertiaLink class="btn-green" href="/invest/create">新增紀錄</InertiaLink>
+    <InertiaLink v-if="isAdmin" class="btn-green" href="/invest/create">新增紀錄</InertiaLink>
 
     <FormRow v-if="investYears.length > 1" label="年分">
         <select v-model="year">
@@ -86,6 +86,7 @@ export default {
         Modal
     },
     props: {
+        isAdmin: Boolean,
         year: Number,
         investYears: Array,
         investRecords: Object

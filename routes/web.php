@@ -13,23 +13,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', [\App\Http\Controllers\LoginController::class, 'index'])->name('login');
-Route::get('/login/{provider}', [\App\Http\Controllers\LoginController::class, 'show']);
-Route::get('/login/{provider}/callback', [\App\Http\Controllers\LoginController::class, 'callback'])
-    ->name('login.callback');
-
-
-Route::get('/', function () {
-    return redirect()->route('invest.index');
-
-    return \Inertia\Inertia::render('Welcome');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/login', [\App\Http\Controllers\LoginController::class, 'index'])->name('login');
+    Route::get('/login/{provider}', [\App\Http\Controllers\LoginController::class, 'show']);
+    Route::get('/login/{provider}/callback', [\App\Http\Controllers\LoginController::class, 'callback'])
+        ->name('login.callback');
 });
 
 
-Route::resource('/invest', \App\Http\Controllers\InvestController::class);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', function () {
+        return redirect()->route('invest.index');
+//        return \Inertia\Inertia::render('Welcome');
+    });
 
-Route::resource('/futures', \App\Http\Controllers\Invest\FuturesController::class)
-    ->parameter('futures', 'investFutures');
+    Route::resource('/invest', \App\Http\Controllers\InvestController::class);
+
+    Route::resource('/futures', \App\Http\Controllers\Invest\FuturesController::class)
+        ->parameter('futures', 'investFutures')
+        ->middleware('can:admin');
+});
 
 Route::group(['prefix' => '/about'], function () {
     Route::get('privacy', [\App\Http\Controllers\AboutController::class, 'privacy']);
