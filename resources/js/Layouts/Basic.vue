@@ -4,7 +4,7 @@
             <header class="container mx-auto flex px-4 justify-between items-center">
                 <InertiaLink href="/" class="text-4xl text-white font-bold">
                     <h1>
-                        <img class="h-16" src="https://www.lovelion.me/logo.png" alt="LoveLion">
+                        <img class="h-16" src="/lovelion.png" alt="LoveLion">
                     </h1>
                 </InertiaLink>
 
