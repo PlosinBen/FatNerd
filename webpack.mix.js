@@ -31,13 +31,14 @@ mix
         },
         resolve: {
             alias: {
-                vue$: 'vue/dist/vue.runtime.esm-browser.js',
+                vue$: 'vue/dist/vue.runtime.esm-browser' + (mix.inProduction() ? '.prod' : '') + '.js',
                 '@': path.resolve('resources/js'),
             },
         },
     })
+    .sourceMaps(!mix.inProduction())
     .version();
 
-if (!mix.inProduction()) {
-    mix.version();
-}
+// if (!mix.inProduction()) {
+//     mix.version();
+// }
