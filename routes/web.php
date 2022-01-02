@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', [\App\Http\Controllers\LoginController::class, 'index'])->name('login');
+Route::get('/login/{provider}', [\App\Http\Controllers\LoginController::class, 'show']);
+Route::get('/login/{provider}/callback', [\App\Http\Controllers\LoginController::class, 'callback'])
+    ->name('login.callback');
+
+
 Route::get('/', function () {
     return redirect()->route('invest.index');
 

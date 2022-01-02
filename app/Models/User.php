@@ -28,4 +28,9 @@ class User extends Authenticatable
     {
         return $this->id === 1;
     }
+
+    public function UserAuths()
+    {
+        return $this->hasMany(UserAuth::class);
+    }
 }

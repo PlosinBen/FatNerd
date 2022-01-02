@@ -12,7 +12,8 @@ class CreateUserAuthTable extends Migration
         $table->id();
         $table->string('provider');
         $table->string('provider_user_id');
-        $table->foreignId('user_id');
+        $table->foreignId('user_id')
+            ->nullable();
         $table->text('data');
 
         $table->unique(['provider', 'provider_user_id']);
