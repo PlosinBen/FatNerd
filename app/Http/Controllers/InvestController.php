@@ -14,8 +14,6 @@ class InvestController extends Controller
 
     public function index(InvestService $investService)
     {
-        auth()->loginUsingId(2);
-
         $investAccountId = auth()->id();
 
         $year = (int)request()->get('year');
