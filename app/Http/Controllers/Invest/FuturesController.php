@@ -42,7 +42,7 @@ class FuturesController extends Controller
             ->view('Futures/Edit', [
                 'action' => [
                     'method' => 'post',
-                    'url' => route('futures.store')
+                    'url' => route('invest.futures.store')
                 ]
             ]);
     }
@@ -54,7 +54,7 @@ class FuturesController extends Controller
                 'investFutures' => InvestFuturesResource::make($investFutures),
                 'action' => [
                     'method' => 'put',
-                    'url' => route('futures.update', $investFutures->period)
+                    'url' => route('invest.futures.update', $investFutures->period)
                 ]
             ]);
     }
@@ -80,7 +80,7 @@ class FuturesController extends Controller
         $this->distributeProfit($futuresService, $period);
 //        $futuresService->distributeProfit($futures);
 
-        return redirect()->route('futures.index');
+        return redirect()->route('invest.futures.index');
     }
 
     protected function distributeProfit(FuturesService $futuresService, Carbon $period)

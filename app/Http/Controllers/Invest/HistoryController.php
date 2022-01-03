@@ -57,7 +57,7 @@ class HistoryController extends Controller
             ),
             'action' => [
                 'method' => 'post',
-                'url' => route('invest.store')
+                'url' => route('invest.history.store')
             ]
         ]);
     }
@@ -74,7 +74,7 @@ class HistoryController extends Controller
             $saveInvestRequest->note
         );
 
-        return redirect()->route('invest.index');
+        return redirect()->route('invest.history.index');
     }
 
     public function destroy(InvestHistory $investHistory)
