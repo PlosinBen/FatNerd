@@ -16,6 +16,10 @@ class HistoryController extends Controller
     {
         $investAccountId = auth()->id();
 
+        if( auth()->user()->isAdmin() && request()->has('account') ) {
+            $investAccountId = request()->get('account');
+        }
+
         $year = (int)request()->get('year');
 
         $years = $investService->getYears($investAccountId);
