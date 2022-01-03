@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'domain' => env('INVEST_DOMAIN'),
+
     'contract' => [
         'step' => 50000,
         'fee_rate' => 0.01

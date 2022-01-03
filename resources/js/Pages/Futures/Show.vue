@@ -71,17 +71,17 @@
                 ></ListTable>
             </div>
             <template #footer>
-                <InertiaLink class="btn-blue" :href="`/futures/${investFutures.data.period}/edit`">編輯</InertiaLink>
-                <InertiaLink class="btn-green" href="/futures">回列表</InertiaLink>
+                <InertiaLink class="btn-blue" :href="`/invest/futures/${investFutures.data.period}/edit`">編輯</InertiaLink>
+                <InertiaLink class="btn-green" href="/invest/futures">回列表</InertiaLink>
             </template>
         </FormPanel>
     </div>
 </template>
 
 <script>
-import Basic from "@/Layouts/Basic";
-import {FormPanel, FormTitle, FormRow} from "@/Components/Form";
-import ListTable from "@/Components/ListTable";
+import Basic from "@/Layouts/Basic"
+import {FormPanel, FormTitle, FormRow} from "@/Components/Form"
+import ListTable from "@/Components/ListTable"
 
 export default {
     layout: Basic,

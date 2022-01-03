@@ -1,17 +1,11 @@
 <template>
     <div class="flex flex-col h-screen">
         <section class="bg-white border-b shadow select-none">
-            <header class="container mx-auto flex px-4 justify-between items-center">
-                <InertiaLink href="/" class="text-4xl text-white font-bold">
-                    <h1>
-                        <img class="h-16" src="/lovelion.png" alt="LoveLion">
-                    </h1>
-                </InertiaLink>
-
+            <Header class="justify-between">
                 <div class="flex-grow flex justify-between items-center">
                     <nav class="ml-5 space-x-4 text-lg text-gray-400">
-                        <InertiaLink href="/invest" class="hover:text-gray-800">投資</InertiaLink>
-                        <InertiaLink v-if="this.$page.props.isAdmin" href="/futures" class="hover:text-gray-800">對帳單</InertiaLink>
+                        <InertiaLink href="/invest/history" class="hover:text-gray-800">投資</InertiaLink>
+                        <InertiaLink v-if="this.$page.props.isAdmin" href="/invest/futures" class="hover:text-gray-800">對帳單</InertiaLink>
                         <InertiaLink v-if="false" href="#" class="hover:text-gray-800">記帳</InertiaLink>
                     </nav>
 
@@ -38,7 +32,7 @@
                         </ul>
                     </div>
                 </div>
-            </header>
+            </Header>
         </section>
         <section class="flex-grow container mx-auto flex flex-col px-4 py-3">
             <Breadcrumbs></Breadcrumbs>
@@ -59,13 +53,15 @@
 </template>
 
 <script>
-import Breadcrumbs from "@/Components/LayoutPartial/Breadcrumbs";
-import Footer from "@/Components/LayoutPartial/Footer";
+import Breadcrumbs from "@/Components/LayoutPartial/Breadcrumbs"
+import Header from "@/Components/LayoutPartial/Header";
+import Footer from "@/Components/LayoutPartial/Footer"
 
 export default {
     name: "Basic",
     components: {
         Breadcrumbs,
+        Header,
         Footer
     },
     data() {

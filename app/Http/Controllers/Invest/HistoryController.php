@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Invest;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveInvestRequest;
 use App\Http\Resources\InvestAccountResource;
 use App\Repository\Invest\InvestAccountRepository;
 use App\Service\InvestService;
 use Carbon\Carbon;
 
-class InvestController extends Controller
+class HistoryController extends Controller
 {
-    protected $title = '投資';
-
     public function index(InvestService $investService)
     {
         $investAccountId = auth()->id();
