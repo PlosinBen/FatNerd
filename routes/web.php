@@ -28,7 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'invest', 'as' => 'invest.'], function () {
 
-        Route::resource('/history', \App\Http\Controllers\Invest\HistoryController::class);
+        Route::resource('/history', \App\Http\Controllers\Invest\HistoryController::class)
+            ->parameter('history', 'investHistory')
+            ->except(['show', 'edit', 'update']);
 
         Route::resource('/futures', \App\Http\Controllers\Invest\FuturesController::class)
             ->parameter('futures', 'investFutures')

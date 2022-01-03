@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Invest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveInvestRequest;
 use App\Http\Resources\InvestAccountResource;
+use App\Models\Invest\InvestHistory;
 use App\Repository\Invest\InvestAccountRepository;
 use App\Service\InvestService;
 use Carbon\Carbon;
@@ -25,7 +26,7 @@ class HistoryController extends Controller
 
         return $this
             ->title('歷史權益')
-            ->view('Invest/Index', [
+            ->view('Invest/History/Index', [
                 'year' => $year,
                 'investYears' => $years,
                 'investRecords' => $investService->getListByYear($investAccountId, $year)
@@ -46,7 +47,7 @@ class HistoryController extends Controller
 
     public function create()
     {
-        return $this->view('Invest/Edit', [
+        return $this->view('Invest/History/Edit', [
             'investAccounts' => InvestAccountResource::collection(
                 app(InvestAccountRepository::class)->fetch()
             ),
@@ -70,5 +71,12 @@ class HistoryController extends Controller
         );
 
         return redirect()->route('invest.index');
+    }
+
+    public function destroy(InvestHistory $investHistory)
+    {
+        $investHistory->delete();
+
+        return redirect()->back();
     }
 }

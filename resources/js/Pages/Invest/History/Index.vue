@@ -53,17 +53,23 @@
             <div class="py-1.5 w-28">類型</div>
             <div class="py-1.5 w-28">金額</div>
             <div class="py-1.5 w-40">備註</div>
+            <div v-if="isAdmin" class=""></div>
         </div>
         <div class="divide-y sm:divide-y-0">
             <div class="flex flex-wrap sm:flex-nowrap py-1.5" v-for="record in historyDetail">
-                <div class="w-full sm:w-28 py-0.5 text-center" v-text="record.occurred_at"></div>
+                <div class="flex-grow sm:flex-grow-0 sm:w-28 py-0.5 text-center" v-text="record.occurred_at"></div>
+
+                <div class="sm:order-last" v-if="isAdmin">
+                    <button class="btn-red" @click="deleteDetail(record.id)">Delete</button>
+                </div>
+
                 <div class="w-1/2 sm:w-28 py-0.5 text-center" v-text="typeText[record.type]"></div>
                 <div
                     class="w-1/2 sm:w-28 sm:px-3 py-0.5 text-right"
                     :class="profitClass(record.type, record.amount)"
                     v-text="record.amount"
                 ></div>
-                <div class="px-3 py-0.5">
+                <div class="px-3 py-0.5 sm:w-40">
                     {{ record.note }}&nbsp;
                 </div>
             </div>
@@ -173,8 +179,14 @@ export default {
             ]
         },
         showDetail(historyDetail) {
+            console.log(historyDetail)
             this.historyDetail = historyDetail
             this.show = true
+        },
+        deleteDetail(historyId) {
+            this.$inertia.post(`/invest/history/${historyId}`, {
+                _method: 'delete'
+            })
         }
     },
 }
