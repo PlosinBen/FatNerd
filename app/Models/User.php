@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Invest\InvestAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,5 +33,10 @@ class User extends Authenticatable
     public function UserAuths()
     {
         return $this->hasMany(UserAuth::class);
+    }
+
+    public function InvestAccount()
+    {
+        return $this->hasOne(InvestAccount::class);
     }
 }

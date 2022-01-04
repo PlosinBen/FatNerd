@@ -14,9 +14,13 @@ class HistoryController extends Controller
 {
     public function index(InvestService $investService)
     {
-        $investAccountId = auth()->id();
+        $investAccountId = optional(auth()->user()->InvestAccount)->id;
 
-        if( auth()->user()->isAdmin() && request()->has('account') ) {
+        if ($investAccountId === null) {
+            return $this->showError('尚未啟用投資帳號，請聯絡管理員');
+        }
+
+        if (request()->has('account') && auth()->user()->isAdmin()) {
             $investAccountId = request()->get('account');
         }
 

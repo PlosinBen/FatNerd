@@ -4,6 +4,14 @@ module.exports = {
     purge: [],
     darkMode: false, // or 'media' or 'class'
     theme: {
+        flexGrow: {
+            DEFAULT: 1,
+            '0': 0,
+            '1': 1,
+            '2': 2,
+            '3': 3,
+            '4': 4,
+        },
         colors: {
             ...colors
         },

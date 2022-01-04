@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,12 +20,19 @@ class Controller extends BaseController
 
     private array $props = [];
 
-    protected function subTitle(string $subtitle)
+    protected function prop($name, $value): self
+    {
+        $this->props[$name] = $value;
+
+        return $this;
+    }
+
+    protected function subTitle(string $subtitle): self
     {
         return $this->prop('_subTitle', $subtitle);
     }
 
-    protected function view($viewPath, $props = [])
+    protected function view($viewPath, $props = []): Responsable
     {
         return Inertia::render($viewPath,
             $props +
@@ -33,14 +41,7 @@ class Controller extends BaseController
         );
     }
 
-    protected function prop($name, $value)
-    {
-        $this->props[$name] = $value;
-
-        return $this;
-    }
-
-    protected function title($title, $subTitle = null)
+    protected function title($title, $subTitle = null): self
     {
         return $this->prop('_title', $title)
             ->prop('_subTitle', $subTitle);
@@ -49,5 +50,14 @@ class Controller extends BaseController
     protected function paginationList(JsonResource $jsonResource)
     {
         return $this->prop('list', $jsonResource);
+    }
+
+    protected function showError(string $message, string $redirectTo = null, int $reciprocal = 0): Responsable
+    {
+        return $this->view('Error', [
+            'message' => $message,
+            'redirectTo' => $reciprocal,
+            'reciprocal' => $reciprocal
+        ]);
     }
 }

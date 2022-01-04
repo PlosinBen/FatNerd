@@ -6,7 +6,7 @@
         <section class="flex-grow mx-auto flex flex-col px-4 py-3">
             <slot></slot>
         </section>
-        <Footer/>
+        <Footer v-if="false"/>
     </div>
 </template>
 

@@ -4,7 +4,7 @@
             <Header class="justify-between">
                 <div class="flex-grow flex justify-between items-center">
                     <nav class="ml-5 space-x-4 text-lg text-gray-400">
-                        <InertiaLink href="/invest/history" class="hover:text-gray-800">投資</InertiaLink>
+                        <InertiaLink v-if="false" href="/invest/history" class="hover:text-gray-800">投資</InertiaLink>
                         <InertiaLink v-if="this.$page.props.isAdmin" href="/invest/futures" class="hover:text-gray-800">對帳單</InertiaLink>
                         <InertiaLink v-if="false" href="#" class="hover:text-gray-800">記帳</InertiaLink>
                     </nav>
