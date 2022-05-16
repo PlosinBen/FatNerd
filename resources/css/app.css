@@ -3,5 +3,6 @@
 
 @import "tailwindcss/components";
 @import "./components";
+@import "./futures";
 
 @import "tailwindcss/utilities";

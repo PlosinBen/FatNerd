@@ -13,6 +13,12 @@ class CreateInvestFuturesProfitTable extends Migration
         $table->id();
         $table->foreignId('invest_futures_id');
         $table->foreignId('invest_account_id');
+        $table->decimal('balance')
+            ->comment('當期餘額(除當期損益)');
+        $table->decimal('transfer')
+            ->comment('加項(出金轉存)');
+        $table->decimal('withdraw')
+            ->comment('減項(出金)');
         $table->decimal('computable', 10, 2)
             ->default(0)
             ->comment('可計算損益金額(上期餘額 - 出金 + 出金轉存)');

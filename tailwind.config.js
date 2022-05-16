@@ -1,7 +1,13 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-    purge: [],
+    purge: {
+        mode: 'jit',
+        content: [
+            './resources/**/*.blade.php',
+            './resources/**/*.vue',
+        ],
+    },
     darkMode: false, // or 'media' or 'class'
     theme: {
         flexGrow: {

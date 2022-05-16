@@ -12,6 +12,9 @@ class InvestFuturesProfit extends Model
     protected $fillable = [
         'invest_futures_id',
         'invest_account_id',
+        'balance',
+        'withdraw',
+        'transfer',
         'computable',
         'quota',
         'profit'

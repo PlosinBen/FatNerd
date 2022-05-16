@@ -1,0 +1,8 @@
+
+.income-profit {
+    @apply text-red-600;
+}
+
+.income-loss {
+    @apply text-green-600;
+}

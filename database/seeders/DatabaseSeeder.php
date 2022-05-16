@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Invest\InvestAccount;
 use App\Models\Invest\InvestHistory;
 use App\Models\Invest\InvestFutures;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,8 +18,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\InvestAccount::factory(10)->create();
-
+        $this->initUser();
         $this->initInvest();
+    }
+
+    protected function initUser()
+    {
+        User::create([
+            'name' => 'Ben',
+            'avatar' => ''
+        ]);
     }
 
     protected function initInvest()

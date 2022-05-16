@@ -1,64 +1,68 @@
 <template>
-    <div>
-        <FormPanel class="flex flex-wrap">
-            <div class="w-full sm:w-1/2 sm:pr-4 sm:border-r">
-                <FormTitle>對帳單資料</FormTitle>
-
-                <div class="flex flex-col sm:flex-row mb-3">
-                    <div class="flex-grow flex flex-row sm:flex-col items-center">
-                        <div class="py-1 w-1/2 sm:w-auto text-center">
-                            期別
-                        </div>
-                        <div class="flex-grow text-right sm:text-center">
-                            {{ investFutures.data.period }}
-                        </div>
-                    </div>
-                    <div class="flex-grow flex flex-row sm:flex-col items-center">
-                        <div class="py-1 w-1/2 sm:w-auto text-center">
-                            期末權益
-                        </div>
-                        <div class="flex-grow text-right sm:text-center">
-                            {{ investFutures.data.commitment }}
-                        </div>
-                    </div>
-                    <div class="flex-grow flex flex-row sm:flex-col items-center">
-                        <div class="py-1 w-1/2 sm:w-auto text-center">
-                            未平倉損益
-                        </div>
-                        <div class="flex-grow text-right sm:text-center">
-                            {{ investFutures.data.open_interest }}
-                        </div>
-                    </div>
-                    <div class="flex-grow flex flex-row sm:flex-col items-center">
-                        <div class="py-1 w-1/2 sm:w-auto text-center">
-                            沖銷損益
-                        </div>
-                        <div class="flex-grow text-right sm:text-center">
-                            {{ investFutures.data.cover_profit }}
-                        </div>
-                    </div>
+    <FormPanel>
+        <FormPanel class="flex flex-col sm:flex-row text-center mx-6 space-y-2">
+            <div class="flex-grow flex sm:flex-col">
+                <div class="flex-1">期別</div>
+                <div class="flex-1" v-text="(investFutures.period)"></div>
+            </div>
+            <div class="flex-grow flex sm:flex-col">
+                <div class="flex-1">期末權益</div>
+                <div
+                    class="flex-1"
+                    v-text="moneyFormat(investFutures.commitment)"
+                ></div>
+            </div>
+            <div class="flex-grow flex sm:flex-col">
+                <div class="flex-1">
+                    未平倉損益
                 </div>
-
-                <FormTitle>損益計算過程資料</FormTitle>
-
+                <div
+                    class="flex-1"
+                    :class="profitAndLossStyle(investFutures.open_interest)"
+                    v-text="moneyFormat(investFutures.open_interest)"
+                ></div>
+            </div>
+            <div class="flex-grow flex sm:flex-col">
+                <div class="flex-1">
+                    沖銷損益
+                </div>
+                <div
+                    class="flex-1"
+                    :class="profitAndLossStyle(investFutures.cover_profit)"
+                    v-text="moneyFormat(investFutures.cover_profit)"
+                ></div>
+            </div>
+            <div class="flex-grow flex sm:flex-col">
+                <div class="flex-1">
+                    其他調整
+                </div>
+                <div
+                    class="flex-1"
+                    v-text="moneyFormat(investFutures.cover_profit)"
+                ></div>
+            </div>
+        </FormPanel>
+        <FormPanel class="flex flex-wrap mt-2">
+            <div class="w-full sm:w-1/2 sm:pr-4 sm:border-r">
+                <FormTitle>損益計算</FormTitle>
 
                 <FormRow label="實質權益(期末權益 - 未平倉損益)">
-                    {{ investFutures.data.real_commitment }}
+                    {{ moneyFormat(investFutures.real_commitment) }}
                 </FormRow>
                 <FormRow label="出入金淨額(當期總入金 - 當期總出金)">
-                    {{ investFutures.data.net_deposit_withdraw }}
+                    {{ moneyFormat(investFutures.net_deposit_withdraw) }}
                 </FormRow>
                 <FormRow label="權益損益(實質權益 - 出入金淨額 - 上期實質權益)">
-                    {{ investFutures.data.commitment_profit }}
+                    {{ moneyFormat(investFutures.commitment_profit) }}
                 </FormRow>
                 <FormRow label="最終損益 min(權益損益, 沖銷損益)">
-                    {{ investFutures.data.profit }}
+                    {{ moneyFormat(investFutures.profit) }}
                 </FormRow>
                 <FormRow label="總分額數">
-                    {{ investFutures.data.total_quota }}
+                    {{ moneyFormat(investFutures.total_quota) }}
                 </FormRow>
                 <FormRow label="每份額損益額">
-                    {{ investFutures.data.profit_per_quota }}
+                    {{ moneyFormat(investFutures.profit_per_quota) }}
                 </FormRow>
             </div>
             <div class="w-full sm:w-1/2 sm:pl-4">
@@ -71,11 +75,12 @@
                 ></ListTable>
             </div>
             <template #footer>
-                <InertiaLink class="btn-blue" :href="`/invest/futures/${investFutures.data.period}/edit`">編輯</InertiaLink>
+                <InertiaLink class="btn-blue" :href="`/invest/futures/${investFutures.period}/edit`">編輯
+                </InertiaLink>
                 <InertiaLink class="btn-green" href="/invest/futures">回列表</InertiaLink>
             </template>
         </FormPanel>
-    </div>
+    </FormPanel>
 </template>
 
 <script>
@@ -113,6 +118,28 @@ export default {
         return {
             tableHeader,
             tableColumns
+        }
+    },
+    computed: {
+        numberformat() {
+            return new Intl.NumberFormat('zh-TW', {
+                trailingZeroDisplay: 'lessPrecision'
+            })
+        }
+    },
+    methods: {
+        moneyFormat(money) {
+            return this.numberformat.format(money)
+        },
+        profitAndLossStyle(money) {
+            console.log(money, money > 0)
+            if (money > 0) {
+                return 'income-profit'
+            }
+
+            if (money < 0) {
+                return 'income-loss'
+            }
         }
     }
 }
