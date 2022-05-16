@@ -1,6 +1,6 @@
 <template>
-    <FormPanel>
-        <FormPanel class="flex flex-col sm:flex-row text-center mx-6 space-y-2">
+    <FormPanel class="flex flex-wrap">
+        <FormPanel class="w-full flex flex-col sm:flex-row text-center space-y-2 sm:space-y-0">
             <div class="flex-grow flex sm:flex-col">
                 <div class="flex-1">期別</div>
                 <div class="flex-1" v-text="(investFutures.period)"></div>
@@ -42,44 +42,40 @@
                 ></div>
             </div>
         </FormPanel>
-        <FormPanel class="flex flex-wrap mt-2">
-            <div class="w-full sm:w-1/2 sm:pr-4 sm:border-r">
-                <FormTitle>損益計算</FormTitle>
+        <FormPanel class="w-full md:w-1/2 md:border-r space-y-3">
+            <FormTitle>損益計算</FormTitle>
 
-                <FormRow label="實質權益(期末權益 - 未平倉損益)">
-                    {{ moneyFormat(investFutures.real_commitment) }}
-                </FormRow>
-                <FormRow label="出入金淨額(當期總入金 - 當期總出金)">
-                    {{ moneyFormat(investFutures.net_deposit_withdraw) }}
-                </FormRow>
-                <FormRow label="權益損益(實質權益 - 出入金淨額 - 上期實質權益)">
-                    {{ moneyFormat(investFutures.commitment_profit) }}
-                </FormRow>
-                <FormRow label="最終損益 min(權益損益, 沖銷損益)">
-                    {{ moneyFormat(investFutures.profit) }}
-                </FormRow>
-                <FormRow label="總分額數">
-                    {{ moneyFormat(investFutures.total_quota) }}
-                </FormRow>
-                <FormRow label="每份額損益額">
-                    {{ moneyFormat(investFutures.profit_per_quota) }}
-                </FormRow>
+            <div
+                v-for="(display, column) in futuresColumns"
+                class="sm:flex"
+            >
+                <div>
+                    {{ display.label }}
+                    <div class="text-sm text-gray-500 inline-block sm:block">
+                        <span>{{ display.comment }}</span>
+                    </div>
+                </div>
+                <div
+                    class="text-right pr-2 sm:flex-grow sm:flex sm:flex-row sm:items-center"
+                >
+                    <span class="flex-grow" v-text="moneyFormat(investFutures[column])"></span>
+                </div>
             </div>
-            <div class="w-full sm:w-1/2 sm:pl-4">
-                <FormTitle>損益拆帳明細</FormTitle>
-                <ListTable
-                    class="text-right"
-                    :list="investFuturesProfits"
-                    :headers="tableHeader"
-                    :columns="tableColumns"
-                ></ListTable>
-            </div>
-            <template #footer>
-                <InertiaLink class="btn-blue" :href="`/invest/futures/${investFutures.period}/edit`">編輯
-                </InertiaLink>
-                <InertiaLink class="btn-green" href="/invest/futures">回列表</InertiaLink>
-            </template>
         </FormPanel>
+        <FormPanel class="w-full sm:w-1/2">
+            <FormTitle>損益拆帳明細</FormTitle>
+            <ListTable
+                class="text-right"
+                :list="investFuturesProfits"
+                :headers="tableHeader"
+                :columns="tableColumns"
+            ></ListTable>
+        </FormPanel>
+        <template #footer>
+            <InertiaLink class="btn-blue" :href="`/invest/futures/${investFutures.period}/edit`">編輯
+            </InertiaLink>
+            <InertiaLink class="btn-green" href="/invest/futures">回列表</InertiaLink>
+        </template>
     </FormPanel>
 </template>
 
@@ -115,21 +111,45 @@ export default {
             'profit'
         ]
 
+        const futuresColumns = {
+            real_commitment: {
+                label: "實質權益",
+                comment: "期末權益 - 未平倉損益"
+            },
+            net_deposit_withdraw: {
+                label: "出入金淨額",
+                comment: "當期總入金 - 當期總出金"
+            },
+            commitment_profit: {
+                label: "權益損益",
+                comment: "實質權益 - 出入金淨額 - 上期實質權益"
+            },
+            profit: {
+                label: "最終損益",
+                comment: "min(權益損益, 沖銷損益)"
+            },
+            total_quota: {
+                label: "總權重數",
+                comment: ""
+            },
+            profit_per_quota: {
+                label: "每權重損益額",
+                comment: ""
+            },
+        }
+
+        const moneyFormatter = window.moneyFormatter();
+
         return {
             tableHeader,
-            tableColumns
-        }
-    },
-    computed: {
-        numberformat() {
-            return new Intl.NumberFormat('zh-TW', {
-                trailingZeroDisplay: 'lessPrecision'
-            })
+            tableColumns,
+            moneyFormatter,
+            futuresColumns
         }
     },
     methods: {
         moneyFormat(money) {
-            return this.numberformat.format(money)
+            return this.moneyFormatter.format(money)
         },
         profitAndLossStyle(money) {
             console.log(money, money > 0)

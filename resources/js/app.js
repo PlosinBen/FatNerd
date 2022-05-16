@@ -3,7 +3,7 @@ require('./bootstrap');
 import {createApp, h} from 'vue';
 import {createInertiaApp, Link} from '@inertiajs/inertia-vue3';
 import {InertiaProgress} from '@inertiajs/progress';
-import { vfmPlugin } from 'vue-final-modal'
+import {vfmPlugin} from 'vue-final-modal'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -21,3 +21,7 @@ createInertiaApp({
 });
 
 InertiaProgress.init({color: '#4B5563'});
+
+window.moneyFormatter = () => new Intl.NumberFormat('zh-TW', {
+    trailingZeroDisplay: 'lessPrecision'
+})

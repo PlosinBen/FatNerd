@@ -2,7 +2,7 @@
     <table class="table-auto w-full border rounded divide-y">
         <tr class="bg-blueGray-400 text-white">
             <th
-                class="py-2 px-3"
+                class="py-2 px-3 text-center"
                 v-for="header in headerSetting"
                 v-text="header.content"
             >

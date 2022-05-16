@@ -1,7 +1,11 @@
 <template>
     <div class="sm:flex pt-3 pb-4 items-center">
-        <div v-if="label" class="flex-shrink-0 py-0.5 sm:py-1.5 px-2 sm:w-32">
+        <div
+            v-if="label"
+            class="flex-shrink-0 py-0.5 sm:py-1.5 px-2 sm:w-32"
+        >
             <span v-text="label"></span>
+            <slot name="label"/>
         </div>
         <div class="flex-grow py-0.5 sm:py-1.5 px-2">
             <slot/>
@@ -16,7 +20,7 @@ export default {
     props: {
         label: String,
         error: String,
-        rwd: String
+        rwd: String,
     },
     setup({rwd}) {
         const rwdClass = {

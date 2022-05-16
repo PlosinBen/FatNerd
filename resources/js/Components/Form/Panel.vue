@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="sm:px-1 md:px-3 lg:px-5 pt-2 pb-4">
         <slot/>
-        <div class="space-x-4 py-3">
+        <div v-if="$slots.hasOwnProperty('footer')" class="w-full space-x-4 py-3">
             <slot name="footer"/>
         </div>
     </div>
