@@ -31,7 +31,7 @@ class FuturesController extends Controller
         return $this->view('Futures/Show', [
             'investFutures' => InvestFuturesResource::make($investFutures),
             'investFuturesProfits' => InvestFuturesProfitResource::collection(
-                $investFutures->InvestFuturesProfits->load('InvestAccount')
+                $investFutures->InvestBalance->load('InvestAccount')
             )
         ]);
     }

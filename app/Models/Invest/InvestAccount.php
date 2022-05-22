@@ -15,7 +15,7 @@ class InvestAccount extends Model
 
     public function InvestProfits()
     {
-        return $this->hasMany(InvestFuturesProfit::class);
+        return $this->hasMany(InvestBalance::class);
     }
 
     public function InvestHistories()

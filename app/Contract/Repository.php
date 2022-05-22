@@ -141,13 +141,16 @@ abstract class Repository
     protected function setEntityColumns(Model $entity, $columns): Model
     {
         foreach ($columns as $columnName => $value) {
-            $entity->__set(parseSnakeCase($columnName), $value);
+            $entity->setAttribute(parseSnakeCase($columnName), $value);
         }
 
         return $entity;
     }
 
-    protected function getModelInstance(): Model
+    /**
+     * @return Model
+     */
+    protected function getModelInstance()
     {
         return app($this->model);
     }

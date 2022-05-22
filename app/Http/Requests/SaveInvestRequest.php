@@ -6,6 +6,13 @@ use App\Models\Invest\InvestAccount;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property $investAccountId
+ * @property $occurredAt
+ * @property $type
+ * @property $amount
+ * @property $note
+ */
 class SaveInvestRequest extends FormRequest
 {
     /**
@@ -44,6 +51,7 @@ class SaveInvestRequest extends FormRequest
                 'numeric'
             ],
             'note' => [
+                'nullable',
                 'string',
             ]
         ];

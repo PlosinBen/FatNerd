@@ -80,7 +80,7 @@ class InvestFuturesRepository extends \App\Contract\Repository
     public function bindProfits(InvestFutures $futures, $profits)
     {
         return $futures
-            ->InvestFuturesProfits()
+            ->InvestBalance()
             ->updateOrCreate([], []);
     }
 }

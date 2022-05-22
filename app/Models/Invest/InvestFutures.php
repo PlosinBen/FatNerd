@@ -3,8 +3,16 @@
 namespace App\Models\Invest;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * attribute
+ * @property Carbon periodDate
+ *
+ * relation
+ * @property Collection|null $InvestBalance
+ */
 class InvestFutures extends Model
 {
     protected $table = 'invest_futures';
@@ -33,8 +41,8 @@ class InvestFutures extends Model
         return Carbon::parse($this->period);
     }
 
-    public function InvestFuturesProfits()
+    public function InvestBalance()
     {
-        return $this->hasMany(InvestFuturesProfit::class, 'invest_futures_id', 'id');
+        return $this->hasMany(InvestBalance::class, 'invest_futures_id', 'invest_futures_id');
     }
 }

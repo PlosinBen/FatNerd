@@ -18,7 +18,7 @@ class CreateInvestAccountTable extends Migration
         $table->enum('contract', [
             'normal',
             'friend'
-        ])->default('normal')->nullable();
+        ])->nullable();
 
         $table->unique('user_id');
     }

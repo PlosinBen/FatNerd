@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Models\Invest\InvestFutures;
-use App\Repository\Invest\InvestFuturesProfitRepository;
+use App\Repository\Invest\InvestBalanceRepository;
 use App\Repository\Invest\InvestFuturesRepository;
 use App\Repository\Invest\InvestHistoryRepository;
 use Carbon\Carbon;
@@ -34,11 +34,24 @@ class FuturesService
             )->refresh();
     }
 
+    protected function createBasicInvestFuturesProfit(Carbon $period)
+    {
+        $accountHistory = app()->make(InvestHistoryRepository::class)
+            ->fetchByPeriod($period)
+            ->groupBy('invest_account_id');
+
+        dd(
+            $accountHistory
+        );
+    }
+
     public function distributeProfit(InvestFutures $investFutures)
     {
         $amountPerQuota = 5000;
 
-        app(InvestHistoryRepository::class)
+        $this->createBasicInvestFuturesProfit($investFutures->periodDate);
+
+        app()->make(InvestHistoryRepository::class)
             ->fetchAccountsComputable($investFutures->periodDate)
             ->map(fn($computable, $investAccountId) => collect([
                 'invest_futures_id' => $investFutures->id,
@@ -90,7 +103,7 @@ class FuturesService
             })
             ->pipe(function ($accountsComputed) {
                 //create futures profit
-                app(InvestFuturesProfitRepository::class)
+                app(InvestBalanceRepository::class)
                     ->create($accountsComputed);
 
                 return $accountsComputed;

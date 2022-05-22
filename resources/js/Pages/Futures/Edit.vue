@@ -2,7 +2,7 @@
     <div>
         <FormPanel>
             <FormRow label="年月" :error="futuresForm.errors.period">
-                <input type="text" v-model="futuresForm.period" :readonly="investFutures.data.period !== undefined">
+                <input type="text" v-model="futuresForm.period" :readonly="investFutures.period !== undefined">
             </FormRow>
             <FormRow label="期末權益" :error="futuresForm.errors.commitment">
                 <input type="number" v-model="futuresForm.commitment">
@@ -45,14 +45,19 @@ export default {
     setup({action, investFutures}) {
         const futuresForm = useForm({
             _method: action.method,
-            period: investFutures.data.period,
-            commitment: investFutures.data.commitment,
-            open_interest: investFutures.data.open_interest,
-            cover_profit: investFutures.data.cover_profit,
+            period: investFutures.period,
+            commitment: investFutures.commitment,
+            open_interest: investFutures.open_interest,
+            cover_profit: investFutures.cover_profit,
         })
 
+        const moneyFormatter = window.moneyFormatter();
+
+        const moneyFormat = (money) => moneyFormatter.format(money)
+
         return {
-            futuresForm
+            futuresForm,
+            moneyFormat
         }
     },
     methods: {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Invest;
 
+use App\Data\InvestHistoryType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveInvestRequest;
 use App\Http\Resources\InvestAccountResource;
@@ -68,12 +69,12 @@ class HistoryController extends Controller
 
     public function store(SaveInvestRequest $saveInvestRequest, InvestService $investService)
     {
-        $occurredAt = Carbon::parse($saveInvestRequest->occurredAt);
-
         $investService->create(
             $saveInvestRequest->investAccountId,
-            $occurredAt,
-            $saveInvestRequest->type,
+            Carbon::parse($saveInvestRequest->occurredAt),
+            app()->make(InvestHistoryType::class, [
+                'value' => $saveInvestRequest->type
+            ]),
             $saveInvestRequest->amount,
             $saveInvestRequest->note
         );
