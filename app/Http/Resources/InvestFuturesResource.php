@@ -19,6 +19,8 @@ class InvestFuturesResource extends JsonResource
             'commitment' => $this->commitment,
             'open_interest' => $this->open_interest,
             'cover_profit' => $this->cover_profit,
+            'deposit' => $this->deposit,
+            'withdraw' => $this->withdraw,
             'real_commitment' => $this->real_commitment,
             'net_deposit_withdraw' => $this->net_deposit_withdraw,
             'commitment_profit' => $this->commitment_profit,

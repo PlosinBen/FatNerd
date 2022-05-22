@@ -70,20 +70,6 @@ class InvestHistoryRepository extends Repository
         ]);
     }
 
-    public function fetchAccountsComputable(Carbon $period)
-    {
-        $prePeriod = $period->copy()->subMonth();
-
-        return $this->getModelInstance()
-            ->period($prePeriod)
-            ->orderBy('occurred_at', 'desc')
-            ->orderByRaw("FIELD(type, 'expense', 'profit')")
-            ->get()
-            ->groupBy('invest_account_id')
-            ->map(fn($investAccountRecords) => $investAccountRecords->first()->balance)
-            ->dd();
-    }
-
     public function calcNetDepositWithdraw(Carbon $period)
     {
         return $this->getModelInstance()
@@ -100,32 +86,9 @@ class InvestHistoryRepository extends Repository
             'serial_number' => 999,
             'type' => $investHistoryType->get(),
             'amount' => $amount,
-            'balance' => 0,
+//            'balance' => 0,
             'note' => $note
         ]);
-
-
-//        $periodRecords->push(
-//            $newEntity = $this->setEntityColumns($this->getModelInstance(), [
-//                'invest_account_id' => $investAccountId,
-//                'occurred_at' => $period,
-//                'type' => $investHistoryType->get(),
-//                'amount' => $amount,
-//                'balance' => 0,
-//                'note' => $note
-//            ])
-//        )
-//            ->sortBy(function (InvestHistory $investHistory) {
-//                $prefix = InvestHistoryType::getForceSortNumber($investHistory->type);
-//                $occurredDay = $investHistory->occurred_at->format('d');
-//                $createdDay = optional($investHistory->created_at)->format('d') ?? '99';
-//
-//                return "{$prefix}{$occurredDay}{$createdDay}";
-//            })
-//            ->dd()
-//            ->each(fn(InvestHistory $investHistory, $index) => $this->updateModel($investHistory, ['serial_number' => $index]));
-//
-//        return $newEntity;
     }
 
     /**
@@ -142,61 +105,27 @@ class InvestHistoryRepository extends Repository
         ]));
     }
 
-//    public function updateBalance(int $investAccountId, Carbon $period)
-//    {
-//        /**
-//         * @var Collection $periodRecords
-//         */
-//        $periodRecords = $this->getModelInstance()
-//            ->investAccountId($investAccountId)
-//            ->period($period->copy())
-//            ->orderBy('occurred_at', 'ASC')
-//            ->orderBy('created_at', 'ASC')
-//            ->get();
-//
-//        $balance = $this->fetchLastBalanceOfPeriod($investAccountId, $period->copy()->subMonth());
-//
-//        $this->getModelInstance()
-//            ->investAccountId($investAccountId)
-//            ->period($period)
-//            ->orderBy('occurred_at', 'ASC')
-//            ->orderBy('id', 'ASC')
-//            ->lazy()
-//            ->reduce(function ($preBalance, InvestHistory $investHistory) {
-//                $investHistory = $this->updateModel($investHistory, [
-//                    'balance' => BcMath::add($preBalance, $investHistory->amount)
-//                ]);
-//
-//                return $investHistory->balance;
-//            }, $balance);
-//    }
-
     /**
-     * @param int $investAccountId
-     * @param Carbon $period
-     * @return string
+     * @param int|InvestHistory $entity
+     * @param int|null $serialNumber
+     * @return InvestHistory|Model|null
      */
-    public function fetchLastBalanceOfPeriod(int $investAccountId, Carbon $period): string
+    public function updateSerialNumber($entity, int $serialNumber)
     {
-        $entity = $this->getModelInstance()
-            ->investAccountId($investAccountId)
-            ->period($period)
-            ->orderBy('serial_number', 'ASC')
-            ->select(['balance'])
-            ->first();
-
-        return optional($entity)->balance ?? '0';
+        return $this->updateModel($entity, [
+            'serial_number' => $serialNumber
+        ]);
     }
 
-    public function insertProfit(int $investAccountId, Carbon $period, int $profit)
+    public function insertProfit(int $investAccountId, Carbon $period, string $amount, string $note)
     {
         return InvestHistory::updateOrCreate([
-            'occurred_at' => $period->copy()->lastOfMonth(),
+            'occurred_at' => $period,
             'invest_account_id' => $investAccountId,
             'type' => 'profit',
         ], [
-            'amount' => $profit,
-            'balance' => 0
+            'amount' => $amount,
+            'note' => $note
         ]);
     }
 

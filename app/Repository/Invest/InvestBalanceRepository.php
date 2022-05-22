@@ -2,14 +2,10 @@
 
 namespace App\Repository\Invest;
 
-use App\Data\InvestHistoryType;
 use App\Models\Invest\InvestBalance;
-use App\Models\Invest\InvestFutures;
-use App\Models\Invest\InvestHistory;
 use App\Support\BcMath;
 use Carbon\Carbon;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class InvestBalanceRepository extends \App\Contract\Repository
 {
@@ -23,6 +19,13 @@ class InvestBalanceRepository extends \App\Contract\Repository
         ])->first();
     }
 
+    public function fetchByPeriod(Carbon $period)
+    {
+        return $this->getModelInstance()
+            ->period($period)
+            ->get();
+    }
+
     public function update(
         int    $investAccountId,
         Carbon $period,
@@ -30,40 +33,33 @@ class InvestBalanceRepository extends \App\Contract\Repository
         string $withdraw,
         string $profit,
         string $expense,
-        string $transfer
+        string $transfer,
+        string $balance = null
     )
     {
-        $prePeriodEntity = $this->fetchByAccountPeriod(
-            $investAccountId,
-            $period->copy()->subMonth()
-        );
-
-        $prePeriodBalance = optional($prePeriodEntity)->balance ?? '0';
-
         $entity = $this->getModelInstance()
             ->firstOrNew([
                 'invest_account_id' => $investAccountId,
                 'period' => $period->format('Y-m')
             ]);
 
-        $balance = BcMath::add(
-            $prePeriodBalance,
+        # computable = preBalance + withdraw + transfer
+        # computable = Balance - deposit - profit - expense
+        $computable = BcMath::sub(
+            $balance,
             $deposit,
-            $withdraw,
             $profit,
-            $expense,
-            $transfer
+            $expense
         );
 
-        $computable = BcMath::add(
-            $prePeriodBalance,
-            $withdraw,
-            $transfer,
-        );
+        $quota = 0;
+        $numberPerQuota = config('invest.contract.step');
 
-        $quota = BcMath::floor(
-            BcMath::div($computable, '5000')
-        );
+        if (BcMath::comp($computable, '0')) {
+            $quota = BcMath::floor(
+                BcMath::comp($computable, $numberPerQuota) ? BcMath::div($computable, $numberPerQuota) : 1
+            );
+        }
 
         return $this->updateModel($entity, [
             'deposit' => $deposit,
@@ -72,8 +68,18 @@ class InvestBalanceRepository extends \App\Contract\Repository
             'expense' => $expense,
             'transfer' => $transfer,
             'balance' => $balance,
+
             'computable' => $computable,
             'quota' => $quota
         ]);
+    }
+
+    /**
+     * this use for IDE method hint
+     * @return InvestBalance|Model
+     */
+    protected function getModelInstance()
+    {
+        return parent::getModelInstance();
     }
 }

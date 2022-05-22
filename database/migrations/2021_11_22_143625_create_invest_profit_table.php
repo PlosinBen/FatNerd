@@ -14,13 +14,17 @@ class CreateInvestProfitTable extends Migration
         $table->id();
         $table->string('period');
         $table->foreignId('invest_account_id');
-
         $table->enum('type', InvestType::all());
+
+        $table->decimal('computable', 10, 2)
+            ->comment('有效權益');
+        $table->smallInteger('quota')
+            ->comment('份額');
 
         $table->decimal('profit', 10, 2)
             ->comment('分配損益');
 
-        $table->unique(['period', 'invest_account_id'], 'unique_futures_account');
+        $table->unique(['period', 'type'], 'unique_futures_account');
         $table->index('invest_account_id');
     }
 }

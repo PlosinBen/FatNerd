@@ -6,6 +6,14 @@ use App\Models\Invest\InvestFutures;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property string $period
+ * @property string $commitment
+ * @property string $open_interest
+ * @property string $cover_profit
+ * @property string $deposit
+ * @property string $withdraw
+ */
 class SaveFuturesRequest extends FormRequest
 {
     /**
@@ -41,7 +49,15 @@ class SaveFuturesRequest extends FormRequest
                 'numeric'
             ],
             'cover_profit' => [
-                'required',
+                'nullable',
+                'numeric'
+            ],
+            'deposit' => [
+                'nullable',
+                'numeric'
+            ],
+            'withdraw' => [
+                'nullable',
                 'numeric'
             ]
         ];

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property string $period
  * @property Carbon $periodDate
+ *
+ * @method $this period(Carbon $period)
  */
 class InvestBalance extends Model
 {
@@ -36,6 +38,13 @@ class InvestBalance extends Model
         }
 
         $this->attributes['period'] = $period;
+    }
+
+    public function scopeInvestAccountId($query, $value)
+    {
+        if ($value) {
+            $query->where('invest_account_id', $value);
+        }
     }
 
     public function scopePeriod($query, $value)

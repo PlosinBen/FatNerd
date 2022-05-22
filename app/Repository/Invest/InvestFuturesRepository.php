@@ -3,6 +3,7 @@
 namespace App\Repository\Invest;
 
 use App\Models\Invest\InvestFutures;
+use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
@@ -25,32 +26,47 @@ class InvestFuturesRepository extends \App\Contract\Repository
      * @param int $commitment
      * @param int $openInterest
      * @param int $coverProfit
+     * @param int $deposit
+     * @param int $withdraw
      * @return InvestFutures
      */
     public function insert(
         Carbon $period,
         int    $commitment,
         int    $openInterest,
-        int    $coverProfit
+        ?int   $coverProfit,
+        int    $deposit,
+        int    $withdraw
     ): InvestFutures
     {
+        $prePeriodInvestFutures = $this->getModelInstance()
+            ->period($period->copy()->subMonth())
+            ->first();
+
+        $prePeriodRealCommitment = optional($prePeriodInvestFutures)->real_commitment ?? 0;
+
         return InvestFutures::updateOrCreate([
             'period' => $period->format('Y-m')
         ], [
             'commitment' => $commitment,
             'open_interest' => $openInterest,
             'cover_profit' => $coverProfit,
-            'real_commitment' => $commitment - $openInterest,
+            'deposit' => $deposit,
+            'withdraw' => $withdraw,
+            'real_commitment' => $realCommitment = $commitment - $openInterest,
 //            'net_deposit_withdraw' => $netDepositWithdraw,
-//            'profit_commitment' => $profitCommitment,
-//            'distribution' => min($profitCommitment, $profit)
+            'commitment_profit' => $profitCommitment = $realCommitment - $deposit + $withdraw - $prePeriodRealCommitment,
+            'profit' => $coverProfit === null ? $profitCommitment : min($profitCommitment, $coverProfit)
         ]);
     }
 
     /**
      * @param InvestFutures $investFutures
      * @param int $netDepositWithdraw
+     * @param int $profitCommitment
+     * @param int $profit
      * @param int $totalQuota
+     * @param int $profitPerQuota
      * @return InvestFutures|Model|null
      */
     public function updateProfit(
@@ -71,16 +87,26 @@ class InvestFuturesRepository extends \App\Contract\Repository
         ]);
     }
 
+    /**
+     * @param InvestFutures $investFutures
+     * @param int $quota
+     * @return InvestFutures|Model|null
+     */
+    public function updateQuota(InvestFutures $investFutures, int $quota)
+    {
+        return $this->updateModel($investFutures, [
+            'total_quota' => $quota,
+            'profit_per_quota' => BcMath::floor(
+                BcMath::div($investFutures->profit, $quota)
+            )
+        ]);
+    }
 
     /**
-     * @param InvestFutures $futures
-     * @param array|Arrayable $profits
-     * @return void
+     * @return InvestFutures|Model
      */
-    public function bindProfits(InvestFutures $futures, $profits)
+    protected function getModelInstance()
     {
-        return $futures
-            ->InvestBalance()
-            ->updateOrCreate([], []);
+        return parent::getModelInstance();
     }
 }

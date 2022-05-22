@@ -13,6 +13,13 @@
             <FormRow label="沖銷損益" :error="futuresForm.errors.cover_profit">
                 <input type="number" v-model="futuresForm.cover_profit">
             </FormRow>
+            <FormRow label="入金" :error="futuresForm.errors.deposit">
+                <input type="number" v-model="futuresForm.deposit">
+            </FormRow>
+            <FormRow label="出金" :error="futuresForm.errors.withdraw">
+                <input type="number" v-model="futuresForm.withdraw">
+            </FormRow>
+
             <template #footer>
                 <button class="btn-blue" @click="save">儲存</button>
                 <InertiaLink class="btn-red" href="/invest/futures">取消</InertiaLink>
@@ -37,7 +44,7 @@ export default {
         investFutures: {
             type: Object,
             default() {
-                return { data: {}}
+                return {data: {}}
             }
         },
         action: Object
@@ -49,6 +56,8 @@ export default {
             commitment: investFutures.commitment,
             open_interest: investFutures.open_interest,
             cover_profit: investFutures.cover_profit,
+            deposit: investFutures.deposit,
+            withdraw: investFutures.withdraw
         })
 
         const moneyFormatter = window.moneyFormatter();

@@ -8,6 +8,7 @@ use App\Http\Resources\InvestFuturesProfitResource;
 use App\Http\Resources\InvestFuturesResource;
 use App\Models\Invest\InvestFutures;
 use App\Service\FuturesService;
+use App\Service\InvestService;
 use Carbon\Carbon;
 
 class FuturesController extends Controller
@@ -74,17 +75,27 @@ class FuturesController extends Controller
             $period,
             $requestData->get('commitment'),
             $requestData->get('open_interest'),
-            $requestData->get('cover_profit')
+            $requestData->get('cover_profit'),
+            $requestData->get('deposit', 0),
+            $requestData->get('withdraw', 0),
         );
 
-        $this->distributeProfit($futuresService, $period);
-//        $futuresService->distributeProfit($futures);
+        $this->distributeProfit($period);
 
         return redirect()->route('invest.futures.index');
     }
 
-    protected function distributeProfit(FuturesService $futuresService, Carbon $period)
+    protected function distributeProfit(Carbon $period)
     {
+        /**
+         * @var InvestService $investService
+         */
+        $investService = app(InvestService::class);
+        /**
+         * @var FuturesService $futuresService
+         */
+        $futuresService = app(FuturesService::class);
+
         while ($futures = $futuresService->get($period)) {
             $futuresService->distributeProfit($futures);
 

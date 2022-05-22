@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
                 'occurred_at' => '2018-09-01',
                 'type' => 'deposit',
                 'amount' => 148956,
-                'balance' => 148956,
+//                'balance' => 148956,
             ]);
         InvestBalance::create([
             'period' => '2018-09',
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                 'occurred_at' => '2018-10-20',
                 'type' => 'deposit',
                 'amount' => 100000,
-                'balance' => 100000,
+//                'balance' => 100000,
             ]);
         InvestBalance::create([
             'period' => '2018-10',

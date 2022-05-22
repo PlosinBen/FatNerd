@@ -39,9 +39,6 @@ abstract class Enum
      */
     public static function __callStatic($method, $args)
     {
-        dd(
-            $method
-        );
         return new static($method);
     }
 

@@ -4,16 +4,23 @@ namespace App\Support;
 
 class BcMath
 {
-    public static function scale(?int $scale = null)
+    protected static $scale = 2;
+
+    public static function scale(int $scale)
     {
-        bcscale($scale);
+        self::$scale = $scale;
     }
 
-    public static function add(string $num1, string ...$nums): string
+    /**
+     * @param string|int $num1
+     * @param string[]|int[] $nums
+     * @return string
+     */
+    public static function add($num1, ...$nums): string
     {
         return array_reduce(
             $nums,
-            fn($current, $num) => bcadd($current, $num),
+            fn($current, $num) => bcadd($current, $num, self::$scale),
             $num1
         );
     }
@@ -27,26 +34,45 @@ class BcMath
         return BcMath::add(...$nums);
     }
 
-    public static function sub(string $num1, string $num2): string
+    /**
+     * @param string|int $num1
+     * @param string[]|int[] $nums
+     * @return string
+     */
+    public static function sub($num1, ...$nums): string
     {
-        return bcsub($num1, $num2);
+        return array_reduce(
+            $nums,
+            fn($current, $num) => bcsub($current, $num, self::$scale),
+            $num1
+        );
     }
 
-    public static function div(string $num1, string $num2)
+    /**
+     * @param string|int $num1
+     * @param string|int $num2
+     * @return string
+     */
+    public static function div($num1, $num2)
     {
-        return bcdiv($num1, $num2);
+        return bcdiv($num1, $num2, self::$scale);
     }
 
-    public static function mul(string $num1, string $num2)
+    /**
+     * @param string|int $num1
+     * @param string|int $num2
+     * @return string
+     */
+    public static function mul($num1, $num2)
     {
-        return bcmul($num1, $num2);
+        return bcmul($num1, $num2, self::$scale);
     }
 
     public static function ceil($number)
     {
         if (strpos($number, '.') !== false) {
-            if (preg_match("~\.[0]+$~", $number)) return BcMath::round($number, 0);
-            if ($number[0] != '-') return bcadd($number, 1, 0);
+            if (preg_match("~\.[0]+$~", $number)) return self::round($number, 0);
+            if ($number[0] != '-') return self::add($number, 1, 0);
             return bcsub($number, 0, 0);
         }
         return $number;
@@ -69,5 +95,15 @@ class BcMath
             return bcsub($number, '0.' . str_repeat('0', $precision) . '5', $precision);
         }
         return $number;
+    }
+
+    /**
+     * @param string|int $num1
+     * @param string|int $num2
+     * @return int
+     */
+    public static function comp($num1, $num2)
+    {
+        return bccomp($num1, $num2);
     }
 }

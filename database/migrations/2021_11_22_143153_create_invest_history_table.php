@@ -21,9 +21,8 @@ class CreateInvestHistoryTable extends Migration
             ->comment('入帳類型');
         $table->decimal('amount', 10, 2)
             ->comment('入帳金額');
-        $table->decimal('balance', 10, 2)
-            ->comment('結餘金額');
-
+//        $table->decimal('balance', 10, 2)
+//            ->comment('結餘金額');
         $table->string('note')
             ->default('');
 
