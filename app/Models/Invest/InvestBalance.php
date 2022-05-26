@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $periodDate
  *
  * @method $this period(Carbon $period)
+ * @method $this investAccountId(int $investAccountId)
  */
 class InvestBalance extends Model
 {

@@ -3,6 +3,7 @@
         <div
             v-if="label"
             class="flex-shrink-0 py-0.5 sm:py-1.5 px-2 sm:w-32"
+            :class="labelClass"
         >
             <span v-text="label"></span>
             <slot name="label"/>
@@ -19,13 +20,17 @@ export default {
     name: "Row",
     props: {
         label: String,
+        labelClass: {
+            default: () => ''
+        },
+        contentClass: {
+            default: () => ''
+        },
         error: String,
         rwd: String,
     },
     setup({rwd}) {
-        const rwdClass = {
-
-        }
+        const rwdClass = {}
     }
 }
 </script>

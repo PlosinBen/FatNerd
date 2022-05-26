@@ -6,6 +6,8 @@ use App\Data\InvestHistoryType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveInvestRequest;
 use App\Http\Resources\InvestAccountResource;
+use App\Http\Resources\InvestBalanceResource;
+use App\Http\Resources\InvestHistoryResource;
 use App\Models\Invest\InvestHistory;
 use App\Repository\Invest\InvestAccountRepository;
 use App\Service\InvestService;
@@ -38,19 +40,8 @@ class HistoryController extends Controller
             ->view('Invest/History/Index', [
                 'year' => $year,
                 'investYears' => $years,
-                'investRecords' => $investService->getListByYear($investAccountId, $year)
-                    ->mapToGroups(function ($investHistory) {
-                        return [
-                            $investHistory->occurred_at->format('Y-m') => $investHistory
-                        ];
-                    })
-                    ->map(function ($monthHistories) {
-                        return $monthHistories
-                            ->groupBy('type')
-                            ->map(fn($groupHistories) => $groupHistories->sum('amount'))
-                            ->put('balance', (int)$monthHistories->first()->balance)
-                            ->put('detail', $monthHistories);
-                    })
+                'investBalances' => InvestBalanceResource::collection($investService->getListByYear($investAccountId, $year)),
+                'investRecords' => InvestHistoryResource::collection($investService->getRecordsByYear($investAccountId, $year))
             ]);
     }
 

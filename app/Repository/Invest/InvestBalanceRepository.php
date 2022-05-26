@@ -19,6 +19,15 @@ class InvestBalanceRepository extends \App\Contract\Repository
         ])->first();
     }
 
+    public function fetchByAccountYear(int $investAccountId, $year)
+    {
+        return $this->getModelInstance()
+            ->investAccountId($investAccountId)
+            ->where('period', 'like', "{$year}%")
+            ->orderBy('period', 'desc')
+            ->get();
+    }
+
     public function fetchByPeriod(Carbon $period)
     {
         return $this->getModelInstance()

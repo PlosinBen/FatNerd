@@ -25,3 +25,11 @@ InertiaProgress.init({color: '#4B5563'});
 window.moneyFormatter = () => new Intl.NumberFormat('zh-TW', {
     trailingZeroDisplay: 'lessPrecision'
 })
+
+window.moneyFormat = (money) => {
+    window.formatter = window.formatter || new Intl.NumberFormat('zh-TW', {
+        trailingZeroDisplay: 'lessPrecision'
+    })
+
+    return window.formatter.format(money)
+}

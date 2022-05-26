@@ -54,7 +54,7 @@ class InvestHistoryRepository extends Repository
         return optional($entity)->balance ?? '0';
     }
 
-    public function fetchByAccount(int $investAccountId, int $year)
+    public function fetchByAccountYear(int $investAccountId, int $year)
     {
         return $this->fetch([
             'orderBy' => 'occurred_at DESC,id DESC',

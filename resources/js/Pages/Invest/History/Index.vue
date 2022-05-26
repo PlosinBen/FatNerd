@@ -1,51 +1,73 @@
 <template>
-    <InertiaLink v-if="isAdmin" class="btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
-
-    <FormRow v-if="investYears.length > 1" label="年分">
-        <select v-model="year">
-            <option
-                v-for="investYear in investYears"
-                :value="investYear"
-                v-text="investYear"
-            ></option>
-        </select>
-    </FormRow>
-
-    <div class="border border-t-0 divide-y">
-        <div class="hidden sm:flex text-center py-1.5 border-t bg-coolGray-400 text-white">
-            <div class="w-1/6">年月</div>
-            <div class="w-1/6">入金</div>
-            <div class="w-1/6">出金</div>
-            <div class="w-1/6">損益</div>
-            <div class="w-1/6">費用</div>
-            <div class="w-1/6">結餘</div>
-        </div>
-        <div
-            class="flex flex-wrap py-1.5 text-right"
-            v-for="(investRecord, period) in investRecords"
-        >
-            <div class="w-full sm:w-1/6 flex items-center justify-center">
-                <button class="border-b hover:text-sky-500" @click.stop="showDetail(investRecord.detail)">
-                    {{ period }}
-                    <i class="fas fa-external-link-alt pl-0.5 fa-xs"></i>
-                </button>
-            </div>
-            <div class="w-5/12 sm:hidden py-0.5 text-center">入金</div>
-            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.deposit || 0"></div>
-            <div class="w-5/12 sm:hidden py-0.5 text-center">出金</div>
-            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.withdraw || 0"></div>
-            <div class="w-5/12 sm:hidden py-0.5 text-center">損益</div>
-            <div
-                class="w-7/12 sm:w-1/6 py-0.5 px-3"
-                :class="profitClass('profit', investRecord.profit)"
-                v-text="investRecord.profit || 0"
-            ></div>
-            <div class="w-5/12 sm:hidden py-0.5 text-center">費用</div>
-            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.expense || 0"></div>
-            <div class="w-5/12 sm:hidden py-0.5 text-center">結餘</div>
-            <div class="w-7/12 sm:w-1/6 py-0.5 px-3" v-text="investRecord.balance || 0"></div>
-        </div>
+    <div class="text-right">
+        <InertiaLink v-if="isAdmin" class="btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
     </div>
+
+    <div class="flex flex-col md:flex-row">
+        <FormPanel class="md:border-r pl-1 pr-2">
+            <ul class="flex md:flex-col">
+                <li class="text-center flex flex-col items-center justify-center hidden">
+                    <i class="w-7 fas fa-angle-left"></i>
+                </li>
+                <li
+                    v-for="investYear in investYears"
+                    class="py-1 px-5"
+                    :class="{'font-bold bg-blue-400 text-white':year === investYear, 'hover:bg-blue-100 hover:text-blue-900': year !== investYear}"
+                >
+                    <span v-if="year === investYear" v-text="investYear"></span>
+                    <InertiaLink v-else :href="`/invest/history?year=${investYear}`" v-text="investYear"></InertiaLink>
+                </li>
+                <li class="text-center flex flex-col items-center justify-center hidden">
+                    <i class="w-7 fas fa-angle-right"></i>
+                </li>
+            </ul>
+        </FormPanel>
+
+        <FormPanel class="flex-grow pl-2 pr-1 max-w-screen-lg">
+            <div class="border divide-y">
+                <FormRow
+                    v-for="investBalance in investBalances"
+                >
+                    <div class="flex flex-col sm:flex-row px-3 space-y-1 sm:space-y-0 sm:text-center">
+                        <div class="flex flex-col justify-center">
+                            <div class="px-3 text-center" v-text="investBalance.period"></div>
+                        </div>
+                        <div class="flex sm:flex-1 sm:flex-col">
+                            <div class="flex-1 sm:py-2">入金</div>
+                            <div class="flex-1 text-right sm:text-center"
+                                 v-text="moneyFormat(investBalance.deposit)"></div>
+                        </div>
+                        <div class="flex sm:flex-1 sm:flex-col">
+                            <div class="flex-1 sm:py-2">出金</div>
+                            <div class="flex-1 text-right sm:text-center"
+                                 v-text="moneyFormat(investBalance.withdraw)"></div>
+                        </div>
+                        <div class="flex sm:flex-1 sm:flex-col">
+                            <div class="flex-1 sm:py-2">損益</div>
+                            <div
+                                class="flex-1 text-right sm:text-center"
+                                :class="profitClass('profit', investBalance.profit)"
+                                v-text="moneyFormat(investBalance.profit)"
+                            ></div>
+                        </div>
+                        <div class="flex sm:flex-1 sm:flex-col">
+                            <div class="flex-1 sm:py-2">費用</div>
+                            <div class="flex-1 text-right sm:text-center"
+                                 v-text="moneyFormat(investBalance.expense)"></div>
+                        </div>
+                        <div class="flex sm:flex-1 sm:flex-col">
+                            <div class="flex-1 sm:py-2">結餘</div>
+                            <div class="flex-1 text-right sm:text-center"
+                                 v-text="moneyFormat(investBalance.balance)"></div>
+                        </div>
+                    </div>
+                </FormRow>
+            </div>
+        </FormPanel>
+    </div>
+    <FormPanel>
+
+    </FormPanel>
 
     <Modal v-model="show">
         <div class="hidden sm:flex text-center border-b">
@@ -67,7 +89,7 @@
                 <div
                     class="w-1/2 sm:w-28 sm:px-3 py-0.5 text-right"
                     :class="profitClass(record.type, record.amount)"
-                    v-text="record.amount"
+                    v-text="moneyFormat(record.amount)"
                 ></div>
                 <div class="px-3 py-0.5 sm:w-40">
                     {{ record.note }}&nbsp;
@@ -80,7 +102,7 @@
 <script>
 import Basic from "@/Layouts/Basic"
 import ListTable from "@/Components/ListTable"
-import {FormRow} from "@/Components/Form"
+import {FormPanel, FormTitle, FormRow} from "@/Components/Form"
 import Modal from "@/Components/Modal"
 import moment from 'moment'
 
@@ -88,6 +110,8 @@ export default {
     layout: Basic,
     components: {
         ListTable,
+        FormPanel,
+        FormTitle,
         FormRow,
         Modal
     },
@@ -95,14 +119,15 @@ export default {
         isAdmin: Boolean,
         year: Number,
         investYears: Array,
-        investRecords: Object
+        investRecords: Array,
+        investBalances: Array
+
     },
     mounted() {
         this.props
     },
     setup() {
         const listHeaders = [
-            '年月',
             '入金',
             '出金',
             '損益',
@@ -113,9 +138,7 @@ export default {
         const listColumns = [
             {
                 class: 'text-center',
-                content(row) {
-                    return moment(row.period).format('YYYY-MM')
-                }
+                content: 'period'
             },
             {
                 class: 'text-right',
@@ -150,15 +173,22 @@ export default {
             transfer: '出金轉存'
         }
 
+        const moneyFormat = window.moneyFormat
+
         return {
             listHeaders,
             listColumns,
             typeText,
+            moneyFormat
         }
     },
     watch: {
         year() {
-            this.$inertia.get(`?year=${this.year}`)
+            let params = new URLSearchParams(location.search)
+
+            params.set('year', this.year.toString())
+
+            this.$inertia.get(`?${params.toString()}`)
         }
     },
     data() {
@@ -169,7 +199,7 @@ export default {
     },
     methods: {
         profitClass(type, amount) {
-            if (type !== 'profit') {
+            if (type !== 'profit' || parseInt(amount) === 0) {
                 return ''
             }
 

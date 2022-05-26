@@ -37,10 +37,11 @@ class FuturesController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(InvestService $investService)
     {
         return $this
             ->view('Futures/Edit', [
+                'amountOfType' => [],
                 'action' => [
                     'method' => 'post',
                     'url' => route('invest.futures.store')

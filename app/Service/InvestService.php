@@ -24,8 +24,22 @@ class InvestService
 
     public function getListByYear(int $investAccountId, int $year)
     {
+        /**
+         * @var InvestBalanceRepository $investBalanceRepository
+         */
+        $investBalanceRepository = app(InvestBalanceRepository::class);
+
+        return $investBalanceRepository
+            ->fetchByAccountYear(
+                $investAccountId,
+                $year
+            );
+    }
+
+    public function getRecordsByYear(int $investAccountId, int $year)
+    {
         return $this->investHistoryRepository
-            ->fetchByAccount($investAccountId, $year);
+            ->fetchByAccountYear($investAccountId, $year);
     }
 
     public function getYears(int $investAccountId): Collection
