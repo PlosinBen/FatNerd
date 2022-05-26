@@ -29,12 +29,13 @@ class InvestFutures extends Model
     protected $fillable = [
         'period',
         'commitment',
-        'deposit',
-        'withdraw',
         'open_interest',
         'cover_profit',
+        'deposit',
+        'withdraw',
         'real_commitment',
         'net_commitment',
+        'commitment_profit',
         'profit',
         'total_quota',
         'profit_per_quota'
@@ -72,6 +73,6 @@ class InvestFutures extends Model
 
     public function InvestBalance()
     {
-        return $this->hasMany(InvestBalance::class, 'invest_futures_id', 'invest_futures_id');
+        return $this->hasMany(InvestBalance::class, 'period', 'period');
     }
 }

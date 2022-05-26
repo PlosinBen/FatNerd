@@ -45,6 +45,8 @@ class InvestFuturesRepository extends \App\Contract\Repository
 
         $prePeriodRealCommitment = optional($prePeriodInvestFutures)->real_commitment ?? 0;
 
+        $netDepositWithDraw = BcMath::add($deposit, $withdraw);
+
         return InvestFutures::updateOrCreate([
             'period' => $period->format('Y-m')
         ], [
@@ -53,9 +55,9 @@ class InvestFuturesRepository extends \App\Contract\Repository
             'cover_profit' => $coverProfit,
             'deposit' => $deposit,
             'withdraw' => $withdraw,
-            'real_commitment' => $realCommitment = $commitment - $openInterest,
+            'real_commitment' => $realCommitment = BcMath::sub($commitment, $openInterest),
 //            'net_deposit_withdraw' => $netDepositWithdraw,
-            'commitment_profit' => $profitCommitment = $realCommitment - $deposit + $withdraw - $prePeriodRealCommitment,
+            'commitment_profit' => $profitCommitment = BcMath::sub($realCommitment, $netDepositWithDraw, $prePeriodRealCommitment),
             'profit' => $coverProfit === null ? $profitCommitment : min($profitCommitment, $coverProfit)
         ]);
     }

@@ -14,6 +14,19 @@ class InvestBalanceResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'invest_account_id' => $this->invest_account_id,
+            'period' => $this->period,
+            'deposit' => $this->deposit,
+            'withdraw' => $this->withdraw,
+            'profit' => $this->profit,
+            'expense' => $this->expense,
+            'transfer' => $this->transfer,
+            'balance' => $this->balance,
+            'computable' => $this->computable,
+            'quota' => $this->quota,
+
+            'invest_account_alias' => $this->whenLoaded('InvestAccount')->alias
+        ];
     }
 }

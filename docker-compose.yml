@@ -27,7 +27,7 @@ services:
             - .data/db:/var/lib/mysql
     node:
         image: node:18
-        entrypoint: [ "yarn", "watch" ]
+        entrypoint: [ "yarn", "prod" ]
         working_dir: /home/node/app
         volumes:
             - ./:/home/node/app

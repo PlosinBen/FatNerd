@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Invest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveFuturesRequest;
+use App\Http\Resources\InvestBalanceResource;
 use App\Http\Resources\InvestFuturesProfitResource;
 use App\Http\Resources\InvestFuturesResource;
 use App\Models\Invest\InvestFutures;
@@ -31,7 +32,7 @@ class FuturesController extends Controller
     {
         return $this->view('Futures/Show', [
             'investFutures' => InvestFuturesResource::make($investFutures),
-            'investFuturesProfits' => InvestFuturesProfitResource::collection(
+            'InvestBalances' => InvestBalanceResource::collection(
                 $investFutures->InvestBalance->load('InvestAccount')
             )
         ]);

@@ -9,7 +9,7 @@
             </th>
         </tr>
         <tr
-            v-for="(row, index) in list.data"
+            v-for="(row, index) in list"
             class="hover:bg-blue-50"
             :class="getClass(index)"
         >

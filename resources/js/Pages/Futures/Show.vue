@@ -34,11 +34,20 @@
             </div>
             <div class="flex-grow flex sm:flex-col">
                 <div class="flex-1">
-                    其他調整
+                    入金
                 </div>
                 <div
                     class="flex-1"
-                    v-text="moneyFormat(investFutures.cover_profit)"
+                    v-text="moneyFormat(investFutures.deposit)"
+                ></div>
+            </div>
+            <div class="flex-grow flex sm:flex-col">
+                <div class="flex-1">
+                    出金
+                </div>
+                <div
+                    class="flex-1"
+                    v-text="moneyFormat(investFutures.withdraw)"
                 ></div>
             </div>
         </FormPanel>
@@ -66,7 +75,7 @@
             <FormTitle>損益拆帳明細</FormTitle>
             <ListTable
                 class="text-right"
-                :list="investFuturesProfits"
+                :list="InvestBalances"
                 :headers="tableHeader"
                 :columns="tableColumns"
             ></ListTable>
@@ -94,7 +103,7 @@ export default {
     },
     props: {
         investFutures: Object,
-        investFuturesProfits: Object
+        InvestBalances: Array
     },
     setup() {
         const tableHeader = [
@@ -104,11 +113,9 @@ export default {
         ]
 
         const tableColumns = [
-            (row) => {
-                return row.invest_account.alias
-            },
+            'invest_account_alias',
             'quota',
-            'profit'
+            (row) =>window.moneyFormat(row.profit)
         ]
 
         const futuresColumns = {

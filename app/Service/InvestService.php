@@ -8,6 +8,7 @@ use App\Models\Invest\InvestHistory;
 use App\Repository\Invest\InvestAccountRepository;
 use App\Repository\Invest\InvestBalanceRepository;
 use App\Repository\Invest\InvestHistoryRepository;
+use App\Repository\Invest\InvestProfitRepository;
 use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

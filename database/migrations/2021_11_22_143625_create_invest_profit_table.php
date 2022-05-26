@@ -24,7 +24,7 @@ class CreateInvestProfitTable extends Migration
         $table->decimal('profit', 10, 2)
             ->comment('分配損益');
 
-        $table->unique(['period', 'type'], 'unique_futures_account');
+        $table->unique(['period', 'invest_account_id', 'type'], 'unique_futures_account');
         $table->index('invest_account_id');
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="space-y-3">
-        <div>
+        <div class="text-right">
             <InertiaLink class="btn-green" href="/invest/futures/create">新增對帳單</InertiaLink>
         </div>
         <ListTable
@@ -40,6 +40,8 @@ export default {
             '期末權益',
             '未平倉損益',
             '沖銷損益',
+            '權益損益',
+            '分配損益'
         ]
 
         const tableColumns = [
@@ -48,21 +50,32 @@ export default {
             },
             {
                 class: 'text-right',
-                content: 'commitment'
+                content: (row) => moneyFormat(row.commitment)
             },
             {
                 class: 'text-right',
-                content: 'open_interest'
+                content: (row) => moneyFormat(row.open_interest)
             },
             {
                 class: 'text-right',
-                content: 'profit'
+                content: (row) => moneyFormat(row.cover_profit)
+            },
+            {
+                class: 'text-right',
+                content: (row) => moneyFormat(row.commitment_profit)
+            },
+            {
+                class: 'text-right',
+                content: (row) => moneyFormat(row.profit)
             }
         ]
 
+        const moneyFormat = window.moneyFormat
+
         return {
             tableHeader,
-            tableColumns
+            tableColumns,
+            moneyFormat
         }
     }
 }

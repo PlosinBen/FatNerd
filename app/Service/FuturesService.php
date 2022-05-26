@@ -3,14 +3,10 @@
 namespace App\Service;
 
 use App\Data\InvestHistoryType;
-use App\Models\Invest\InvestAccount;
 use App\Models\Invest\InvestFutures;
-use App\Repository\Invest\InvestBalanceRepository;
 use App\Repository\Invest\InvestFuturesRepository;
-use App\Repository\Invest\InvestHistoryRepository;
 use App\Support\BcMath;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 class FuturesService
 {
@@ -65,7 +61,7 @@ class FuturesService
                 )
             );
 
-        $investAccountProfit->each(function ($accountProfit, $investAccountId) use ($investService, $investFutures) {
+        $investAccountProfit->each(function ($accountProfit, $investAccountId) use ($investService, $investFutures, $investAccountQuota) {
             $investService->create(
                 $investAccountId,
                 $investFutures->periodDate->copy(),
