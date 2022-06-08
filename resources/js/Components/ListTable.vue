@@ -11,12 +11,12 @@
         <tr
             v-for="(row, index) in list"
             class="hover:bg-blue-50"
-            :class="getClass(index)"
+            :class="getRowClass(index)"
         >
             <td
                 class="py-1.5 px-2"
                 v-for="(column, index) in columnSetting"
-                :class="column.class"
+                :class="getClass(column.class, row)"
             >
                 <slot :name="`column_${index}`" :row="row">
                     {{ getContent(column.content, row) }}
@@ -87,7 +87,10 @@ export default {
         getContent(content, row) {
             return {}.toString.call(content) === '[object Function]' ? content(row) : row[content]
         },
-        getClass(index) {
+        getClass(classes, row) {
+            return {}.toString.call(classes) === '[object Function]' ? classes(row) : classes
+        },
+        getRowClass(index) {
             return this.colors[index % this.colorCount];
         }
     }

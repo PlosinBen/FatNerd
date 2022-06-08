@@ -20,7 +20,19 @@ createInertiaApp({
     },
 });
 
-InertiaProgress.init({color: '#4B5563'});
+InertiaProgress.init({color: '#4B5563'})
+
+window.profitClass = (amount, type) => {
+
+    if (typeof type === "string" && type !== 'profit') {
+        return ''
+    }
+    if (amount == 0) {
+        return ''
+    }
+
+    return amount > 0 ? 'text-red-600' : 'text-green-600'
+}
 
 window.moneyFormatter = () => new Intl.NumberFormat('zh-TW', {
     trailingZeroDisplay: 'lessPrecision'

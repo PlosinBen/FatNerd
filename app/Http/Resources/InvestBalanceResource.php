@@ -9,7 +9,7 @@ class InvestBalanceResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -26,7 +26,9 @@ class InvestBalanceResource extends JsonResource
             'computable' => $this->computable,
             'quota' => $this->quota,
 
-            'invest_account_alias' => $this->whenLoaded('InvestAccount')->alias
+            'invest_account_alias' => $this->whenLoaded(
+                'InvestAccount', fn() => $this->InvestAccount->alias
+            )
         ];
     }
 }
