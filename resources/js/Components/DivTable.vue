@@ -1,6 +1,6 @@
 <template>
     <div class="border divide-y">
-        <div class="flex">
+        <div class="hidden sm:flex">
             <div
                 v-for="header in headers"
                 class="flex-1 text-center font-bold py-2 bg-blueGray-400 text-white"
@@ -8,17 +8,28 @@
             ></div>
         </div>
         <div
-            class="flex py-2.5"
+            class="block sm:flex py-2.5 space-y-1.5"
+            :class="{'cursor-pointer hover:bg-blue-100': hasRowLink}"
             v-for="row in list"
+            @click="rowClick(row)"
         >
-            <div
-                class="flex-1"
-                v-for="content in contents"
+            <template
+                v-for="(content, index) in contents"
             >
-                <slot :name="content.slot" :row="row">
-                    {{ getContent(content.text, row) }}
-                </slot>
-            </div>
+                <div
+                    class="inline-block w-1/2 text-center sm:hidden"
+                >
+                    {{ headers[index].text }}
+                </div>
+                <div
+                    class="inline-block w-1/2 flex-1"
+                    :class="getColumn(content.class, row)"
+                >
+                    <slot :name="content.slot" :row="row">
+                        {{ getContent(content.text, row) }}
+                    </slot>
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -28,7 +39,8 @@ export default {
     name: "DivTable",
     props: {
         list: Array,
-        columns: Array
+        columns: Array,
+        rowLink: Function
     },
     setup({columns}) {
         const headers = []
@@ -51,9 +63,23 @@ export default {
             contents
         }
     },
+    computed: {
+        hasRowLink() {
+            return typeof this.rowLink === "function"
+        }
+    },
     methods: {
         getContent(content, row) {
             return {}.toString.call(content) === '[object Function]' ? content(row) : row[content]
+        },
+        getColumn(content, row) {
+            return {}.toString.call(content) === '[object Function]' ? content(row) : content
+        },
+        rowClick(row) {
+            if(this.hasRowLink) {
+                let link = this.rowLink(row)
+                this.$inertia.get(link)
+            }
         }
     }
 }

@@ -83,6 +83,11 @@ class InvestHistory extends Model
         $this->lessThan($query, 'occurred_at', $value);
     }
 
+    public function scopeType($query, $value)
+    {
+        $query->where('type', $value);
+    }
+
     public function InvestAccount()
     {
         return $this->belongsTo(InvestAccount::class);

@@ -64,33 +64,6 @@ class InvestFuturesRepository extends \App\Contract\Repository
 
     /**
      * @param InvestFutures $investFutures
-     * @param int $netDepositWithdraw
-     * @param int $profitCommitment
-     * @param int $profit
-     * @param int $totalQuota
-     * @param int $profitPerQuota
-     * @return InvestFutures|Model|null
-     */
-    public function updateProfit(
-        InvestFutures $investFutures,
-        int           $netDepositWithdraw,
-        int           $profitCommitment,
-        int           $profit,
-        int           $totalQuota,
-        int           $profitPerQuota
-    )
-    {
-        return $this->updateModel($investFutures, [
-            'net_deposit_withdraw' => $netDepositWithdraw,
-            'commitment_profit' => $profitCommitment,
-            'profit' => $profit,
-            'total_quota' => $totalQuota,
-            'profit_per_quota' => $profitPerQuota
-        ]);
-    }
-
-    /**
-     * @param InvestFutures $investFutures
      * @param int $quota
      * @return InvestFutures|Model|null
      */

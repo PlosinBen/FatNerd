@@ -4,16 +4,15 @@
             <InertiaLink class="btn-green" href="/invest/futures/create">新增對帳單</InertiaLink>
         </div>
         <DivTable
+            class="max-w-sm mx-auto sm:max-w-full"
             :list="list.data"
             :columns="columnsConfig"
-        >
-            <template #Period="{row}">
-                <span class="text-blue-600">
-                    {{ row.period }}
-                </span>
-            </template>
-        </DivTable>
+            :rowLink="tableRowLink"
+        ></DivTable>
+
+
         <ListTable
+            class="hidden"
             :list="list.data"
             :headers="tableHeader"
             :columns="tableColumns"
@@ -47,32 +46,38 @@ export default {
         list: Object
     },
     setup() {
-        const tableConfig = {}
+        const tableRowLink = (row) => `/invest/futures/${row.period}`
 
         const columnsConfig = [
             {
                 header: '年月',
-                slot: 'Period'
+                // slot: 'Period',
+                content: 'period',
+                contentClass: 'text-center'
             },
             {
                 header: '期末權益',
-                content: (row) => moneyFormat(row.commitment)
+                content: (row) => moneyFormat(row.commitment),
+                contentClass: 'text-right pr-3'
             },
             {
                 header: '未平倉損益',
-                content: (row) => moneyFormat(row.open_interest)
+                content: (row) => moneyFormat(row.open_interest),
+                contentClass: 'text-right pr-3'
             },
             {
                 header: '沖銷損益',
-                content: (row) => moneyFormat(row.cover_profit)
+                content: (row) => moneyFormat(row.cover_profit),
+                contentClass: 'text-right pr-3'
             },
             {
                 header: '權益損益',
-                content: (row) => moneyFormat(row.commitment_profit)
+                content: (row) => moneyFormat(row.commitment_profit),
+                contentClass: 'text-right pr-3'
             },
             {
                 header: '分配損益',
-                contentClass: (row) => ('text-right ' + profitClass(row.profit)),
+                contentClass: (row) => ('text-right pr-3 ' + profitClass(row.profit)),
                 content: (row) => moneyFormat(row.profit)
             }
         ]
@@ -89,6 +94,7 @@ export default {
         const tableColumns = [
             {
                 class: 'text-center',
+                content: 'period'
             },
             {
                 class: 'text-right',
@@ -120,6 +126,7 @@ export default {
             tableHeader,
             tableColumns,
             columnsConfig,
+            tableRowLink,
             moneyFormat,
             profitClass
         }

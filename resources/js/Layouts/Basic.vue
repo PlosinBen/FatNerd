@@ -7,6 +7,8 @@
                         <InertiaLink v-if="false" href="/invest/history" class="hover:text-gray-800">投資</InertiaLink>
                         <InertiaLink v-if="this.$page.props.isAdmin" href="/invest/futures" class="hover:text-gray-800">對帳單</InertiaLink>
                         <InertiaLink v-if="false" href="#" class="hover:text-gray-800">記帳</InertiaLink>
+
+                        <InertiaLink href="/about/privacy">隱私權政策</InertiaLink>
                     </nav>
 
                     <div v-if="false" class="relative h-10">
@@ -48,7 +50,7 @@
                 <slot></slot>
             </div>
         </section>
-        <Footer v-if="false"/>
+        <Footer />
     </div>
 </template>
 

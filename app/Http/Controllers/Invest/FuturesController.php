@@ -90,10 +90,6 @@ class FuturesController extends Controller
     protected function distributeProfit(Carbon $period)
     {
         /**
-         * @var InvestService $investService
-         */
-        $investService = app(InvestService::class);
-        /**
          * @var FuturesService $futuresService
          */
         $futuresService = app(FuturesService::class);

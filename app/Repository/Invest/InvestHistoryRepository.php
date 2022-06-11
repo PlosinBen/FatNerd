@@ -6,11 +6,9 @@ use App\Contract\Repository;
 use App\Data\InvestHistoryType;
 use App\Models\Invest\InvestAccount;
 use App\Models\Invest\InvestHistory;
-use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class InvestHistoryRepository extends Repository
 {
@@ -119,14 +117,23 @@ class InvestHistoryRepository extends Repository
 
     public function insertProfit(int $investAccountId, Carbon $period, string $amount, string $note)
     {
-        return InvestHistory::updateOrCreate([
-            'occurred_at' => $period,
+        $lastOfMonth = $period->copy()->lastOfMonth();
+
+        $entity = $this->fetch([
             'invest_account_id' => $investAccountId,
             'type' => 'profit',
-        ], [
+            'period' => $lastOfMonth
+        ])->first() ?? $this->getModelInstance();
+
+        $this->updateModel($entity, [
+            'occurred_at' => $lastOfMonth,
+            'invest_account_id' => $investAccountId,
+            'type' => 'profit',
             'amount' => $amount,
             'note' => $note
         ]);
+
+        return $entity;
     }
 
     public function insertExpenseIncome(int $investAccountId, Carbon $period, int $expense)

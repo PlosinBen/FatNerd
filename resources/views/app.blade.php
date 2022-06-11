@@ -18,7 +18,7 @@
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
-<body class="font-sans bg-gray-50">
+<body class="font-sans bg-coolGray-200">
 @inertia
 </body>
 </html>

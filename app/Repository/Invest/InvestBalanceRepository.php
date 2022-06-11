@@ -28,13 +28,6 @@ class InvestBalanceRepository extends \App\Contract\Repository
             ->get();
     }
 
-    public function fetchByPeriod(Carbon $period)
-    {
-        return $this->getModelInstance()
-            ->period($period)
-            ->get();
-    }
-
     public function update(
         int    $investAccountId,
         Carbon $period,

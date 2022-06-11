@@ -8,7 +8,6 @@ use App\Models\Invest\InvestHistory;
 use App\Repository\Invest\InvestAccountRepository;
 use App\Repository\Invest\InvestBalanceRepository;
 use App\Repository\Invest\InvestHistoryRepository;
-use App\Repository\Invest\InvestProfitRepository;
 use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -87,7 +86,7 @@ class InvestService
         );
     }
 
-    protected function createProfitExpenseHistory(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note)
+    protected function createProfitHistory(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note)
     {
         $this->investHistoryRepository
             ->insertProfit(
