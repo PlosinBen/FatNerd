@@ -26,6 +26,8 @@
         <FormPanel class="flex-grow pl-2 pr-1 max-w-screen-lg">
             <div class="border divide-y">
                 <FormRow
+                    class="hover:bg-blue-50 cursor-pointer"
+                    @click="showDetail(investBalance.period)"
                     v-for="investBalance in investBalances"
                 >
                     <div class="flex flex-col sm:flex-row px-3 space-y-1 sm:space-y-0 sm:text-center">
@@ -104,7 +106,8 @@ import Basic from "@/Layouts/Basic"
 import ListTable from "@/Components/ListTable"
 import {FormPanel, FormTitle, FormRow} from "@/Components/Form"
 import Modal from "@/Components/Modal"
-import { usePage } from '@inertiajs/inertia-vue3'
+import {usePage} from '@inertiajs/inertia-vue3'
+import moment from "moment";
 
 export default {
     layout: Basic,
@@ -122,9 +125,6 @@ export default {
         investRecords: Array,
         investBalances: Array
 
-    },
-    mounted() {
-        this.props
     },
     setup() {
         const listHeaders = [
@@ -208,9 +208,10 @@ export default {
                 amount > 0 ? 'text-red-600' : 'text-green-600'
             ]
         },
-        showDetail(historyDetail) {
-            console.log(historyDetail)
-            this.historyDetail = historyDetail
+        showDetail(period) {
+            let momentPeriod = moment(period)
+
+            this.historyDetail = this.investRecords.filter((history) => momentPeriod.isSame(history.occurred_at, 'month'))
             this.show = true
         },
         deleteDetail(historyId) {
