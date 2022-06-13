@@ -21,6 +21,8 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
+
     Route::get('/', function () {
         return redirect()->route('invest.history.index');
 //        return \Inertia\Inertia::render('Welcome');
