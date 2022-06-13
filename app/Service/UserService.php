@@ -8,7 +8,7 @@ class UserService
 {
     public function login(string $provider, \Laravel\Socialite\Contracts\User $socialUser)
     {
-        $userRepository = app()->make(UserRepository::class);
+        $userRepository = app(UserRepository::class);
 
         $user = $userRepository->get($provider, $socialUser->getId());
 

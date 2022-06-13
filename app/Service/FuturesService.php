@@ -18,13 +18,13 @@ class FuturesService
 
     public function get(Carbon $period)
     {
-        return app()->make(InvestFuturesRepository::class)
+        return app(InvestFuturesRepository::class)
             ->find($period);
     }
 
     public function createFutures(Carbon $period, int $commitment, int $openInterest, ?int $profit, int $deposit = 0, int $withdraw = 0)
     {
-        return app()->make(InvestFuturesRepository::class)
+        return app(InvestFuturesRepository::class)
             ->insert(
                 $period,
                 $commitment,
@@ -37,8 +37,8 @@ class FuturesService
 
     public function distributeProfit(InvestFutures $investFutures)
     {
-        $investService = app()->make(InvestService::class);
-        $investFuturesRepository = app()->make(InvestFuturesRepository::class);
+        $investService = app(InvestService::class);
+        $investFuturesRepository = app(InvestFuturesRepository::class);
 
         $investAccountQuota = $investService
             ->getComputableBalance($investFutures->periodDate->copy())

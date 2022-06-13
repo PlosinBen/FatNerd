@@ -28,6 +28,20 @@ class InvestBalanceRepository extends \App\Contract\Repository
             ->get();
     }
 
+    public function fetchTotalAmountOfTypeByPeriod(Carbon $period)
+    {
+        return $this->getModelInstance()
+            ->period($period)
+            ->selectRaw("
+                SUM(deposit) as deposit,
+                SUM(withdraw) as withdraw,
+                SUM(profit) as profit,
+                SUM(expense) as expense,
+                SUM(transfer) as transfer
+            ")
+            ->first();
+    }
+
     public function update(
         int    $investAccountId,
         Carbon $period,

@@ -40,6 +40,8 @@ class FuturesController extends Controller
 
     public function create(InvestService $investService)
     {
+
+
         return $this
             ->view('Futures/Edit', [
                 'amountOfType' => [],

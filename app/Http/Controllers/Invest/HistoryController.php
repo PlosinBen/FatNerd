@@ -63,7 +63,7 @@ class HistoryController extends Controller
         $investService->create(
             $saveInvestRequest->investAccountId,
             Carbon::parse($saveInvestRequest->occurredAt),
-            app()->make(InvestHistoryType::class, [
+            app(InvestHistoryType::class, [
                 'value' => $saveInvestRequest->type
             ]),
             $saveInvestRequest->amount,

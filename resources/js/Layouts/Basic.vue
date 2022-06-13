@@ -11,23 +11,23 @@
                         <InertiaLink href="/about/privacy">隱私權政策</InertiaLink>
                     </nav>
 
-                    <div v-if="false" class="relative h-10">
+                    <div class="relative h-10">
                         <button class="w-10 overflow-hidden border border-gray-400 rounded-full">
                             <img src="https://graph.facebook.com/1918911484817617/picture?width=150&height=150" alt="Avatar">
                         </button>
-                        <ul v-if="false" class="absolute right-0 bg-white space-y border shadow rounded">
-                            <li>
-                                <a class="inline-block w-full px-3 py-1 hover:bg-blue-50" href="#">
+                        <ul class="absolute right-0 bg-white space-y border shadow rounded">
+                            <li v-if="0">
+                                <a class="inline-block w-full px-4 py-1.5 hover:bg-blue-50" href="#">
                                     Profile
                                 </a>
                             </li>
-                            <li>
-                                <a class="inline-block w-full px-3 py-1 hover:bg-blue-50" href="#">
+                            <li v-if="0">
+                                <a class="inline-block w-full px-4 py-1.5 hover:bg-blue-50" href="#">
                                     Setting
                                 </a>
                             </li>
                             <li>
-                                <a class="inline-block w-full px-3 py-1 hover:bg-blue-50" href="#">
+                                <a class="inline-block w-full px-4 py-1.5 hover:bg-blue-50" href="/logout">
                                     Logout
                                 </a>
                             </li>

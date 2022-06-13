@@ -3,12 +3,12 @@
         <div class="hidden sm:flex">
             <div
                 v-for="header in headers"
-                class="flex-1 text-center font-bold py-2 bg-blueGray-400 text-white"
+                class="flex-1 text-center font-bold py-2 bg-blueGray-400 text-white tracking-wider"
                 v-text="header.text"
             ></div>
         </div>
         <div
-            class="block sm:flex py-2.5 space-y-1.5"
+            class="block sm:flex py-2.5 px-3"
             :class="{'cursor-pointer hover:bg-blue-100': hasRowLink}"
             v-for="row in list"
             @click="rowClick(row)"
@@ -17,12 +17,12 @@
                 v-for="(content, index) in contents"
             >
                 <div
-                    class="inline-block w-1/2 text-center sm:hidden"
+                    class="inline-block w-1/2 text-center sm:hidden tracking-wide"
                 >
                     {{ headers[index].text }}
                 </div>
                 <div
-                    class="inline-block w-1/2 flex-1"
+                    class="inline-block w-1/2 flex-1 px-1.5"
                     :class="getColumn(content.class, row)"
                 >
                     <slot :name="content.slot" :row="row">

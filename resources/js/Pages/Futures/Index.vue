@@ -58,26 +58,26 @@ export default {
             {
                 header: '期末權益',
                 content: (row) => moneyFormat(row.commitment),
-                contentClass: 'text-right pr-3'
+                contentClass: 'text-right'
             },
             {
                 header: '未平倉損益',
                 content: (row) => moneyFormat(row.open_interest),
-                contentClass: 'text-right pr-3'
+                contentClass: 'text-right'
             },
             {
                 header: '沖銷損益',
                 content: (row) => moneyFormat(row.cover_profit),
-                contentClass: 'text-right pr-3'
+                contentClass: 'text-right'
             },
             {
                 header: '權益損益',
                 content: (row) => moneyFormat(row.commitment_profit),
-                contentClass: 'text-right pr-3'
+                contentClass: 'text-right'
             },
             {
                 header: '分配損益',
-                contentClass: (row) => ('text-right pr-3 ' + profitClass(row.profit)),
+                contentClass: (row) => ('text-right ' + profitClass(row.profit)),
                 content: (row) => moneyFormat(row.profit)
             }
         ]

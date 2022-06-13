@@ -56,6 +56,12 @@ class InvestService
             ->fetch();
     }
 
+    public function getBalanceTypeSummary(Carbon $period)
+    {
+        return app(InvestBalanceRepository::class)
+            ->fetchTotalAmountOfType();
+    }
+
     public function create(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note = null)
     {
         if (!method_exists($this, $specialMethod = parseCameCase("create_{$investHistoryType->get()}_history"))) {
@@ -168,7 +174,7 @@ class InvestService
         /**
          * @var InvestBalanceRepository $investBalanceRepository
          */
-        $investBalanceRepository = app()->make(InvestBalanceRepository::class);
+        $investBalanceRepository = app(InvestBalanceRepository::class);
 
         $prePeriodInvestBalance = $investBalanceRepository
             ->fetchByAccountPeriod($investAccountId, $period->copy()->subMonth());
