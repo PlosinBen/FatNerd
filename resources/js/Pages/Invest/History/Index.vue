@@ -1,6 +1,6 @@
 <template>
     <div class="text-right">
-        <InertiaLink v-if="isAdmin" class="btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
+        <InertiaLink v-if="this.$page.props.isAdmin" class="btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
     </div>
 
     <div class="flex flex-col md:flex-row">
@@ -104,7 +104,7 @@ import Basic from "@/Layouts/Basic"
 import ListTable from "@/Components/ListTable"
 import {FormPanel, FormTitle, FormRow} from "@/Components/Form"
 import Modal from "@/Components/Modal"
-import moment from 'moment'
+import { usePage } from '@inertiajs/inertia-vue3'
 
 export default {
     layout: Basic,
