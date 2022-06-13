@@ -1,10 +1,15 @@
 <template>
     <div class="flex flex-col h-screen">
         <section class="bg-white border-b shadow select-none">
-            <Header class="justify-between">
+            <Header :user="user">
+                <InertiaLink href="/" class="text-4xl text-white font-bold">
+                    <h1>
+                        <img class="h-16" src="/lovelion.png" alt="LoveLion">
+                    </h1>
+                </InertiaLink>
                 <div class="flex-grow flex justify-between items-center">
                     <nav class="ml-5 space-x-4 text-lg text-gray-400">
-                        <InertiaLink v-if="false" href="/invest/history" class="hover:text-gray-800">投資</InertiaLink>
+                        <InertiaLink v-if="false" href="/invest/history" class="hover:text-gray-800">歷史權益</InertiaLink>
                         <InertiaLink v-if="this.$page.props.isAdmin" href="/invest/futures" class="hover:text-gray-800">
                             對帳單
                         </InertiaLink>
@@ -17,7 +22,7 @@
                         <button class="w-10 overflow-hidden border border-gray-400 rounded-full">
                             <img :src="user.avatar" class="w-10 h-10" @click="showUserMenu = !showUserMenu" alt="Avatar">
                         </button>
-                        <ul v-if="showUserMenu" class="absolute right-0 bg-white space-y border shadow rounded">
+                        <ul v-if="showUserMenu" class="sm:absolute sm:right-0 bg-white space-y border shadow rounded">
                             <li v-if="0">
                                 <a class="inline-block w-full px-4 py-1.5 hover:bg-blue-50" href="#">
                                     Profile
