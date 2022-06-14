@@ -81,9 +81,9 @@
             ></ListTable>
         </FormPanel>
         <template #footer>
-            <InertiaLink class="btn-blue" :href="`/invest/futures/${investFutures.period}/edit`">編輯
+            <InertiaLink class="btn btn-blue" :href="`/invest/futures/${investFutures.period}/edit`">編輯
             </InertiaLink>
-            <InertiaLink class="btn-green" href="/invest/futures">回列表</InertiaLink>
+            <InertiaLink class="btn btn-green" href="/invest/futures">回列表</InertiaLink>
         </template>
     </FormPanel>
 </template>

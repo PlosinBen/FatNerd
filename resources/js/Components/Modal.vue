@@ -15,8 +15,8 @@
             <slot :params="params"></slot>
         </div>
         <div v-if="false" class="flex-shrink-0 flex justify-center items-center pt-4 space-x-4">
-            <button class="btn-blue" @click="$emit('confirm', close)">confirm</button>
-            <button class="btn-red" @click="$emit('cancel', close)">cancel</button>
+            <button class="btn btn-blue" @click="$emit('confirm', close)">confirm</button>
+            <button class="btn btn-red" @click="$emit('cancel', close)">cancel</button>
         </div>
         <button class="absolute top-0 right-0 mt-0.5 mr-2" @click="close">
             <i class="fas fa-times"></i>

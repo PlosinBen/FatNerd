@@ -15,7 +15,7 @@
                         </InertiaLink>
                         <InertiaLink v-if="false" href="#" class="hover:text-gray-800">記帳</InertiaLink>
 
-                        <InertiaLink href="/about/privacy">隱私權政策</InertiaLink>
+                        <InertiaLink class="hover:text-gray-800" href="/about/privacy">隱私權政策</InertiaLink>
                     </nav>
 
                     <div class="relative h-10">

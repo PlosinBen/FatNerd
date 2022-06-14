@@ -1,6 +1,6 @@
 <template>
     <div class="text-right">
-        <InertiaLink v-if="this.$page.props.isAdmin" class="btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
+        <InertiaLink v-if="this.$page.props.isAdmin" class="btn btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
     </div>
 
     <div class="flex flex-col md:flex-row">
@@ -84,7 +84,7 @@
                 <div class="flex-grow sm:flex-grow-0 sm:w-28 py-0.5 text-center" v-text="record.occurred_at"></div>
 
                 <div class="sm:order-last" v-if="isAdmin">
-                    <button class="btn-red" @click="deleteDetail(record.id)">Delete</button>
+                    <button class="btn btn-red btn-sm" @click="deleteDetail(record.id)">Delete</button>
                 </div>
 
                 <div class="w-1/2 sm:w-28 py-0.5 text-center" v-text="typeText[record.type]"></div>

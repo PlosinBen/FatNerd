@@ -21,8 +21,8 @@
             </FormRow>
 
             <template #footer>
-                <button class="btn-blue" @click="save">儲存</button>
-                <InertiaLink class="btn-red" href="/invest/futures">取消</InertiaLink>
+                <button class="btn btn-blue" @click="save">儲存</button>
+                <InertiaLink class="btn btn-red" href="/invest/futures">取消</InertiaLink>
             </template>
         </FormPanel>
     </div>

@@ -5,7 +5,7 @@
         <FormTitle class="border-b py-2">登入</FormTitle>
 
         <FormRow>
-            <InertiaLink href="/login/facebook" class="btn-blue bg-blue-600 py-1.5 px-3">
+            <InertiaLink href="/login/facebook" class="btn btn-blue bg-blue-600 py-1.5 px-3">
                 <i class="fab fa-facebook-f border-r pr-3 mr-2"></i>
                 Sign in with Facebook
             </InertiaLink>

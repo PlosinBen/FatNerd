@@ -30,8 +30,8 @@
             <input type="text" v-model="form.note">
         </FormRow>
         <template #footer>
-            <button class="btn-blue" :disabled="form.processing" @click="submit">送出</button>
-            <InertiaLink class="btn-red" href="/invest/history">取消</InertiaLink>
+            <button class="btn btn-blue" :disabled="form.processing" @click="submit">送出</button>
+            <InertiaLink class="btn btn-red" href="/invest/history">取消</InertiaLink>
         </template>
     </FormPanel>
 </template>
