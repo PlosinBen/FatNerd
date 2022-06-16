@@ -40,8 +40,6 @@ class FuturesController extends Controller
 
     public function create(InvestService $investService)
     {
-
-
         return $this
             ->view('Futures/Edit', [
                 'amountOfType' => [],
@@ -80,8 +78,8 @@ class FuturesController extends Controller
             $requestData->get('commitment'),
             $requestData->get('open_interest'),
             $requestData->get('cover_profit'),
-            $requestData->get('deposit', 0),
-            $requestData->get('withdraw', 0),
+            $requestData->get('deposit'),
+            $requestData->get('withdraw')
         );
 
         $this->distributeProfit($period);
@@ -97,7 +95,9 @@ class FuturesController extends Controller
         $futuresService = app(FuturesService::class);
 
         while ($futures = $futuresService->get($period)) {
-            $futuresService->distributeProfit($futures);
+            $futuresService
+                ->distributeProfit($futures)
+                ->distributeExpense($period);
 
             $period->addMonth();
         }

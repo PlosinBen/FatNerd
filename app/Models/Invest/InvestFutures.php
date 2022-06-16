@@ -12,8 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $profit
  * @property int $profit_per_quota
  *
- * scop
- * @method $this period()
+ * @method $this period(Carbon $period)
+ * @method $this startPeriod(Carbon $period)
+ * @method $this endPeriod(Carbon $period)
+ *
  *
  * relation
  * @property Collection|null $InvestBalance
@@ -69,6 +71,24 @@ class InvestFutures extends Model
         }
 
         $query->where('period', $value);
+    }
+
+    public function scopeStartPeriod($query, $value)
+    {
+        if($value instanceof Carbon) {
+            $value = $value->format('Y-m');
+        }
+
+        $query->where('period', '>=', $value);
+    }
+
+    public function scopeEndPeriod($query, $value)
+    {
+        if($value instanceof Carbon) {
+            $value = $value->format('Y-m');
+        }
+
+        $query->where('period', '<=', $value);
     }
 
     public function InvestBalance()

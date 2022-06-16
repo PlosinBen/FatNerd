@@ -11,7 +11,6 @@ use App\Repository\Invest\InvestHistoryRepository;
 use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class InvestService
 {
@@ -59,95 +58,23 @@ class InvestService
     public function getBalanceTypeSummary(Carbon $period)
     {
         return app(InvestBalanceRepository::class)
-            ->fetchTotalAmountOfType();
+            ->fetchSumOfTypeByPeriod($period);
     }
 
     public function create(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note = null)
     {
-        if (!method_exists($this, $specialMethod = parseCameCase("create_{$investHistoryType->get()}_history"))) {
-            $specialMethod = "createBasicHistory";
-        }
-
-        call_user_func_array([$this, $specialMethod], [
+        $this->investHistoryRepository->insert(
             $investAccountId,
             $occurredAt,
             $investHistoryType,
             $amount,
-            $note
-        ]);
+            $note ?? ''
+        );
 
         $this->updateHistorySerialNumber($investAccountId, $occurredAt);
 
         $this->updateBalance($investAccountId, $occurredAt);
     }
-
-    protected function createBasicHistory(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note)
-    {
-        $this->investHistoryRepository->insert(
-            $investAccountId,
-            $occurredAt,
-            $investHistoryType,
-            $investHistoryType->getSign($amount),
-            $note ?? ''
-        );
-    }
-
-    protected function createProfitHistory(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note)
-    {
-        $this->investHistoryRepository
-            ->insertProfit(
-                $investAccountId,
-                $occurredAt,
-                $amount,
-                $note ?? ''
-            );
-    }
-
-    protected function createExpenseHistory(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note)
-    {
-        // 費用
-        // user $investAccountId 新增費用(負數)
-        $this->investHistoryRepository->insert(
-            $investAccountId,
-            $occurredAt,
-            $investHistoryType,
-            $investHistoryType->getSign($amount),
-            $note ?? ''
-        );
-
-        // user 1 新增費用(正數)
-        $this->investHistoryRepository->insert(
-            1,
-            $occurredAt,
-            $investHistoryType,
-            $amount,
-            "From {$investAccountId} Expense"
-        );
-    }
-
-    protected function createTransferHistory(int $investAccountId, Carbon $occurredAt, InvestHistoryType $investHistoryType, string $amount, ?string $note)
-    {
-        // 出金轉存
-        // user 1 新增出金轉存(正數)
-        $this->investHistoryRepository->insert(
-            1,
-            $occurredAt,
-            $investHistoryType,
-            $amount,
-            "From {$investAccountId} Transfer"
-        );
-
-        // user $investAccountId 新增出金(負數)
-        $this->investHistoryRepository->insert(
-            $investAccountId,
-            $occurredAt,
-            $type = InvestHistoryType::withdraw(),
-            $type->getSign($amount),
-            $note
-        );
-    }
-
-//    protected function calc
 
     protected function updateHistorySerialNumber(int $investAccountId, Carbon $period)
     {
@@ -157,8 +84,6 @@ class InvestService
                 $prefix = InvestHistoryType::getForceSortNumber($investHistory->type);
                 $occurredDay = $investHistory->occurred_at->format('d');
                 $createdDay = $investHistory->created_at->format('d');
-
-                Log::info("{$investHistory->id}: {$prefix}{$occurredDay}{$createdDay}");
 
                 return "{$prefix}{$occurredDay}{$createdDay}";
             }, SORT_NUMERIC)
@@ -177,7 +102,7 @@ class InvestService
         $investBalanceRepository = app(InvestBalanceRepository::class);
 
         $prePeriodInvestBalance = $investBalanceRepository
-            ->fetchByAccountPeriod($investAccountId, $period->copy()->subMonth());
+            ->fetchByAccountPeriod($investAccountId, $period->copy()->firstOfMonth()->subMonth());
 
         $investTypeAmount = $this->investHistoryRepository
             ->fetchByAccountPeriod($investAccountId, $period->copy())
@@ -189,6 +114,16 @@ class InvestService
                 );
             });
 
+//        if( $investAccountId === 4 && $period->isSameMonth('2019-12', true) && $investTypeAmount->has('expense') ) {
+//            dd(
+//                $period,
+//                $period->copy()->subMonth(),
+//                $prePeriodInvestBalance,
+//                $investTypeAmount
+//            );
+//        }
+
+        # Calc Balance
         $investTypeAmount->put(
             'balance',
             BcMath::add(
@@ -197,13 +132,7 @@ class InvestService
             )
         );
 
-        $needSave = $investTypeAmount
-            ->reduce(
-                fn(bool $current, $amount, $type) => $current || BcMath::comp($amount, '0') !== 0,
-                true
-            );
-
-        if (!$needSave) {
+        if ($investTypeAmount->filter(fn($column) => !BcMath::equal($column, 0))->count() === 0) {
             return null;
         }
 
@@ -232,5 +161,30 @@ class InvestService
             })
             #filter null(all amount is zero)
             ->filter();
+    }
+
+    public function getComputeExceptionBalance(Carbon $start, Carbon $end, bool $updateBeforeFetch = false)
+    {
+        /**
+         * @var InvestBalanceRepository $investBalanceRepository
+         */
+        $investBalanceRepository = app(InvestBalanceRepository::class);
+
+        return $investBalanceRepository
+            ->fetchAccountSumOfTypeByPeriod($start, $end)
+            ->filter(fn($entity) => $entity->profit > 0)
+            ->filter(fn($entity) => $entity->invest_account_id > 1)
+            ->filter(fn($entity) => $entity->InvestAccount->contract !== null)
+            ->map(function($entity) use($investBalanceRepository, $end) {
+                $lastBalance = $investBalanceRepository
+                    ->fetchByAccountPeriod(
+                        $entity->invest_account_id,
+                        $end
+                    )->balance;
+
+                $entity->balance = $lastBalance;
+
+                return $entity;
+            });
     }
 }

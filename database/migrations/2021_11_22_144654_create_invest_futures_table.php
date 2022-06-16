@@ -43,7 +43,7 @@ class CreateInvestFuturesTable extends Migration
             ->default(0)
             ->comment('最終損益 min(權益損益, 沖銷損益)');
 
-        $table->smallInteger('total_quota')
+        $table->decimal('total_quota', 5, 1)
             ->unsigned()
             ->default(0)
             ->comment('總分額數');

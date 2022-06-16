@@ -7,6 +7,7 @@ use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\PseudoTypes\Numeric_;
 
 class InvestFuturesRepository extends \App\Contract\Repository
 {
@@ -64,10 +65,10 @@ class InvestFuturesRepository extends \App\Contract\Repository
 
     /**
      * @param InvestFutures $investFutures
-     * @param int $quota
+     * @param numeric $quota
      * @return InvestFutures|Model|null
      */
-    public function updateQuota(InvestFutures $investFutures, int $quota)
+    public function updateQuota(InvestFutures $investFutures, $quota)
     {
         return $this->updateModel($investFutures, [
             'total_quota' => $quota,

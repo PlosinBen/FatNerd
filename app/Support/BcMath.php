@@ -106,4 +106,34 @@ class BcMath
     {
         return bccomp($num1, $num2);
     }
+
+    /**
+     * 1: num1 > num2
+     * 0: equal
+     * -1: num1 < num2
+     *
+     * @param string|int $num1
+     * @param string|int $num2
+     * @param ?int $scale = null
+     * @return int
+     */
+    public static function compare($num1, $num2, ?int $scale = null)
+    {
+        return bccomp($num1, $num2, $scale);
+    }
+
+    public static function more($num1, $num2, ?int $scale = null)
+    {
+        return bccomp($num1, $num2, $scale) === 1;
+    }
+
+    public static function less($num1, $num2, ?int $scale = null)
+    {
+        return bccomp($num1, $num2, $scale) === -1;
+    }
+
+    public static function equal($num1, $num2, ?int $scale = null)
+    {
+        return bccomp($num1, $num2, $scale) === 0;
+    }
 }

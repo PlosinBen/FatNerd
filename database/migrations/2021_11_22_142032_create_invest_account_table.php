@@ -16,8 +16,9 @@ class CreateInvestAccountTable extends Migration
         $table->unsignedSmallInteger('start_year_at')
             ->default(0);
         $table->enum('contract', [
-            'normal',
-            'friend'
+            'standard',
+            'friend',
+            'specially'
         ])->nullable();
 
         $table->unique('user_id');

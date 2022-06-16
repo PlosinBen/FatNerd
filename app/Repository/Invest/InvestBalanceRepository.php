@@ -28,10 +28,9 @@ class InvestBalanceRepository extends \App\Contract\Repository
             ->get();
     }
 
-    public function fetchTotalAmountOfTypeByPeriod(Carbon $period)
+    public function fetchSumOfTypeByPeriod(Carbon $period)
     {
         return $this->getModelInstance()
-            ->period($period)
             ->selectRaw("
                 SUM(deposit) as deposit,
                 SUM(withdraw) as withdraw,
@@ -39,7 +38,37 @@ class InvestBalanceRepository extends \App\Contract\Repository
                 SUM(expense) as expense,
                 SUM(transfer) as transfer
             ")
+            ->period($period)
             ->first();
+    }
+
+    /**
+     * @param Carbon $period
+     * @param Carbon|null $endPeriod
+     * @return Model
+     */
+    public function fetchAccountSumOfTypeByPeriod(Carbon $period, Carbon $endPeriod = null)
+    {
+        $query = $this->getModelInstance()
+            ->selectRaw("
+                invest_account_id,
+                SUM(deposit) as deposit,
+                SUM(withdraw) as withdraw,
+                SUM(profit) as profit,
+                SUM(expense) as expense,
+                SUM(transfer) as transfer
+            ")
+            ->groupBy('invest_account_id');
+
+        if ($endPeriod === null) {
+            $query = $query->period($period);
+        } else {
+            $query = $query
+                ->startPeriod($period)
+                ->endPeriod($endPeriod);
+        }
+
+        return $query->get();
     }
 
     public function update(
@@ -71,10 +100,14 @@ class InvestBalanceRepository extends \App\Contract\Repository
         $quota = 0;
         $numberPerQuota = config('invest.contract.step');
 
-        if (BcMath::comp($computable, '0')) {
+        if (BcMath::more($computable, '0')) {
             $quota = BcMath::floor(
                 BcMath::comp($computable, $numberPerQuota) ? BcMath::div($computable, $numberPerQuota) : 1
             );
+
+            if( BcMath::equal($quota, 0) ) {
+                $quota = 0.5;
+            }
         }
 
         return $this->updateModel($entity, [

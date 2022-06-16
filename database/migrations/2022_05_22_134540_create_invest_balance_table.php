@@ -35,7 +35,7 @@ class CreateInvestBalanceTable extends Migration
         $table->decimal('computable', 10, 2)
             ->default(0)
             ->comment('有效結餘(上期餘額 - 出金 + 出金轉存)');
-        $table->unsignedSmallInteger('quota')
+        $table->decimal('quota', 5, 1)
             ->default(0)
             ->comment('有效權重');
     }

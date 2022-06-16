@@ -6,6 +6,7 @@ use App\Contract\Repository;
 use App\Data\InvestHistoryType;
 use App\Models\Invest\InvestAccount;
 use App\Models\Invest\InvestHistory;
+use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -76,33 +77,6 @@ class InvestHistoryRepository extends Repository
             ->sum('amount');
     }
 
-    public function insert(int $investAccountId, Carbon $period, InvestHistoryType $investHistoryType, string $amount, string $note)
-    {
-        return $this->insertModel([
-            'invest_account_id' => $investAccountId,
-            'occurred_at' => $period,
-            'serial_number' => 999,
-            'type' => $investHistoryType->get(),
-            'amount' => $amount,
-//            'balance' => 0,
-            'note' => $note
-        ]);
-    }
-
-    /**
-     * @param int|InvestHistory $entity
-     * @param string $balance
-     * @param int|null $serialNumber
-     * @return InvestHistory|Model|null
-     */
-    public function updateBalance($entity, string $balance, int $serialNumber = null)
-    {
-        return $this->updateModel($entity, array_filter([
-            'balance' => $balance,
-            'serial_number' => $serialNumber
-        ]));
-    }
-
     /**
      * @param int|InvestHistory $entity
      * @param int|null $serialNumber
@@ -115,19 +89,66 @@ class InvestHistoryRepository extends Repository
         ]);
     }
 
+
+    public function insert(int $investAccountId, Carbon $period, InvestHistoryType $investHistoryType, string $amount, string $note)
+    {
+        switch ($investHistoryType->get()) {
+            case 'profit':
+                $entity = $this->insertProfit(
+                    $investAccountId,
+                    $period,
+                    $amount,
+                    $note
+                );
+                break;
+            case 'expense':
+                $entity = $this->insertExpense(
+                    $investAccountId,
+                    $period,
+                    $amount,
+                    $note
+                );
+                break;
+            case 'transfer':
+                $entity = $this->insertTransfer(
+                    $investAccountId,
+                    $period,
+                    $amount,
+                    $note
+                );
+                break;
+            case 'withdraw':
+                $amount = BcMath::mul($amount, -1);
+            default:
+                $entity = $this->insertModel([
+                    'invest_account_id' => $investAccountId,
+                    'occurred_at' => $period,
+                    'serial_number' => 999,
+                    'type' => $investHistoryType->get(),
+                    'amount' => $amount,
+                    'note' => $note
+                ]);
+                break;
+        }
+
+        return $entity;
+    }
+
+
     public function insertProfit(int $investAccountId, Carbon $period, string $amount, string $note)
     {
         $lastOfMonth = $period->copy()->lastOfMonth();
 
         $entity = $this->fetch([
-            'invest_account_id' => $investAccountId,
-            'type' => 'profit',
-            'period' => $lastOfMonth
-        ])->first() ?? $this->getModelInstance();
+                'invest_account_id' => $investAccountId,
+                'type' => 'profit',
+                'period' => $lastOfMonth
+            ])->first() ?? $this->getModelInstance();
 
         $this->updateModel($entity, [
             'occurred_at' => $lastOfMonth,
             'invest_account_id' => $investAccountId,
+            'serial_number' => 0,
             'type' => 'profit',
             'amount' => $amount,
             'note' => $note
@@ -136,20 +157,53 @@ class InvestHistoryRepository extends Repository
         return $entity;
     }
 
-    public function insertExpenseIncome(int $investAccountId, Carbon $period, int $expense)
+    public function insertExpense(int $investAccountId, Carbon $period, int $expense, string $note)
     {
+        $period = $period->copy()->lastOfMonth();
 
-    }
+        // user 1 新增費用收入, 利用note做唯一性
+        InvestHistory::updateOrCreate([
+            'occurred_at' => $period,
+            'invest_account_id' => 1,
+            'type' => 'expense',
+            'note' => "From {$investAccountId} Expense"
+        ], [
+            'amount' => $expense,
+            'serial_number' => 999
+        ]);
 
-    public function insertExpense(int $investAccountId, Carbon $period, int $expense)
-    {
+        // user $investAccountId 新增費用(負數)
         return InvestHistory::updateOrCreate([
-            'occurred_at' => $period->copy()->lastOfMonth,
+            'occurred_at' => $period,
             'invest_account_id' => $investAccountId,
             'type' => 'expense',
         ], [
-            'amount' => $expense,
-            'balance' => 0
+            'amount' => BcMath::mul($expense, -1),
+            'note' => $note,
+            'serial_number' => 999
+        ]);
+    }
+
+    public function insertTransfer(int $investAccountId, Carbon $period, int $amount, string $note)
+    {
+        // user 1 新增出金轉存(正數)
+        $this->insertModel([
+            'invest_account_id' => 1,
+            'occurred_at' => $period,
+            'serial_number' => 999,
+            'type' => 'transfer',
+            'amount' => $amount,
+            'note' => "From {$investAccountId} Transfer"
+        ]);
+
+        // user 新增出金
+        return $this->insertModel([
+            'invest_account_id' => $investAccountId,
+            'occurred_at' => $period,
+            'serial_number' => 999,
+            'type' => 'withdraw',
+            'amount' => BcMath::mul($amount, -1),
+            'note' => $note
         ]);
     }
 
@@ -167,37 +221,6 @@ class InvestHistoryRepository extends Repository
             ])
             ->orderBy('invest_account_record_id', 'DESC')
             ->first();
-    }
-
-    public function fetchAccountComputableAndQuota(InvestAccount $investAccount, Carbon $period)
-    {
-        $entity = InvestHistory::period($period)
-            ->investAccountId($investAccount->id)
-            ->where('computable', '>', 0)
-            ->first();
-
-        if ($entity) {
-            return $entity->only('computable', 'quota');
-        }
-
-        $preHistory = InvestHistory::period($period->copy()->subMonth())
-            ->investAccountId($investAccount->id)
-            ->where('balance', '>', 0)
-            ->first();
-
-        if ($preHistory === null) {
-            return null;
-        }
-
-        return InvestHistory::firstOrCreate([
-            'period' => $period,
-            'invest_account_id' => $investAccount->id,
-
-            'computable' => $preHistory->balance,
-            'quota' => floor($preHistory->balance / 5000),
-
-            'balance' => $preHistory->balance,
-        ])->only('computable', 'quota');
     }
 
     public function fetchOccurredYears(int $investAccountId)

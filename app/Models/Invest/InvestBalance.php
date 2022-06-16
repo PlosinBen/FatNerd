@@ -6,10 +6,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $invest_account_id
  * @property string $period
  * @property Carbon $periodDate
  *
  * @method $this period(Carbon $period)
+ * @method $this startPeriod(Carbon $period)
+ * @method $this endPeriod(Carbon $period)
  * @method $this investAccountId(int $investAccountId)
  */
 class InvestBalance extends Model
@@ -55,6 +58,24 @@ class InvestBalance extends Model
         }
 
         $query->where('period', $value);
+    }
+
+    public function scopeStartPeriod($query, $value)
+    {
+        if ($value instanceof Carbon) {
+            $value = $value->format('Y-m');
+        }
+
+        $query->where('period', '>=', $value);
+    }
+
+    public function scopeEndPeriod($query, $value)
+    {
+        if ($value instanceof Carbon) {
+            $value = $value->format('Y-m');
+        }
+
+        $query->where('period', '<=', $value);
     }
 
     public function InvestFutures()
