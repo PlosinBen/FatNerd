@@ -56,7 +56,8 @@ abstract class Repository
     public function fetchPagination($columns = []): LengthAwarePaginator
     {
         return $this->modelSetFilter($columns)
-            ->paginate($this->perPage);
+            ->paginate($this->perPage)
+            ->withQueryString();
     }
 
     /**
