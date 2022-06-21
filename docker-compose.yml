@@ -3,7 +3,7 @@ version: "3.9"
 services:
     php:
         build: ./docker/php
-        working_dir: /var/www/html/public
+        working_dir: /var/www/html
         volumes:
             - ./:/var/www/html
             - ./docker/php/php-fpm.conf.sh:/usr/local/etc/php-fpm.d/custom.conf
@@ -27,7 +27,6 @@ services:
             - .data/db:/var/lib/mysql
     node:
         image: node:18
-        entrypoint: [ "yarn", "prod" ]
         working_dir: /home/node/app
         volumes:
             - ./:/home/node/app
