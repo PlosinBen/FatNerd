@@ -26,7 +26,11 @@ class InvestService
         return app(InvestBalanceRepository::class)
             ->with('InvestHistory')
             ->perPage(12)
-            ->fetchPagination($filter);
+            ->fetchPagination(
+                array_merge([
+                    'orderBy' => 'period DESC'
+                ], $filter)
+            );
     }
 
     public function getListByYear(int $investAccountId, int $year)
