@@ -21,6 +21,14 @@ class InvestService
         $this->investHistoryRepository = $investHistoryRepository;
     }
 
+    public function getList($filter = [])
+    {
+        return app(InvestBalanceRepository::class)
+            ->with('InvestHistory')
+            ->perPage(12)
+            ->fetchPagination($filter);
+    }
+
     public function getListByYear(int $investAccountId, int $year)
     {
         /**
@@ -175,7 +183,7 @@ class InvestService
             ->filter(fn($entity) => $entity->profit > 0)
             ->filter(fn($entity) => $entity->invest_account_id > 1)
             ->filter(fn($entity) => $entity->InvestAccount->contract !== null)
-            ->map(function($entity) use($investBalanceRepository, $end) {
+            ->map(function ($entity) use ($investBalanceRepository, $end) {
                 $lastBalance = $investBalanceRepository
                     ->fetchByAccountPeriod(
                         $entity->invest_account_id,

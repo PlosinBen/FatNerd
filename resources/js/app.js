@@ -23,7 +23,6 @@ createInertiaApp({
 InertiaProgress.init({color: '#4B5563'})
 
 window.profitClass = (amount, type) => {
-
     if (typeof type === "string" && type !== 'profit') {
         return ''
     }
@@ -31,7 +30,7 @@ window.profitClass = (amount, type) => {
         return ''
     }
 
-    return amount > 0 ? 'text-red-600' : 'text-green-600'
+    return 'font-bold ' + (amount > 0 ? 'text-red-600' : 'text-green-600')
 }
 
 window.moneyFormatter = () => new Intl.NumberFormat('zh-TW', {

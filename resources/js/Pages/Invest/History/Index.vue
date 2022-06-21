@@ -1,89 +1,33 @@
 <template>
     <div class="text-right">
-        <InertiaLink v-if="this.$page.props.isAdmin" class="btn btn-green" href="/invest/history/create">新增紀錄</InertiaLink>
+        <InertiaLink v-if="this.$page.props.isAdmin" class="btn btn-green" href="/invest/history/create">
+            新增紀錄
+        </InertiaLink>
     </div>
 
-    <div class="flex flex-col md:flex-row">
-        <FormPanel class="md:border-r pl-1 pr-2">
-            <ul class="flex md:flex-col">
-                <li class="text-center flex flex-col items-center justify-center hidden">
-                    <i class="w-7 fas fa-angle-left"></i>
-                </li>
-                <li
-                    v-for="investYear in investYears"
-                    class="py-1 px-5"
-                    :class="{'font-bold bg-blue-400 text-white':year === investYear, 'hover:bg-blue-100 hover:text-blue-900': year !== investYear}"
-                >
-                    <span v-if="year === investYear" v-text="investYear"></span>
-                    <InertiaLink v-else :href="`/invest/history?year=${investYear}`" v-text="investYear"></InertiaLink>
-                </li>
-                <li class="text-center flex flex-col items-center justify-center hidden">
-                    <i class="w-7 fas fa-angle-right"></i>
-                </li>
-            </ul>
-        </FormPanel>
+    <div class="">
+        <DivTable
+            class="max-w-screen-md mx-auto"
+            v-bind="balances"
+            :columns="balanceTable"
 
-        <FormPanel class="flex-grow pl-2 pr-1 max-w-screen-lg">
-            <div class="border divide-y">
-                <FormRow
-                    class="hover:bg-blue-50 cursor-pointer"
-                    @click="showDetail(investBalance.period)"
-                    v-for="investBalance in investBalances"
-                >
-                    <div class="flex flex-col sm:flex-row px-3 space-y-1 sm:space-y-0 sm:text-center">
-                        <div class="flex flex-col justify-center">
-                            <div class="px-3 text-center" v-text="investBalance.period"></div>
-                        </div>
-                        <div class="flex sm:flex-1 sm:flex-col">
-                            <div class="flex-1 sm:py-2">入金</div>
-                            <div class="flex-1 text-right sm:text-center"
-                                 v-text="moneyFormat(investBalance.deposit)"></div>
-                        </div>
-                        <div class="flex sm:flex-1 sm:flex-col">
-                            <div class="flex-1 sm:py-2">出金</div>
-                            <div class="flex-1 text-right sm:text-center"
-                                 v-text="moneyFormat(investBalance.withdraw)"></div>
-                        </div>
-                        <div class="flex sm:flex-1 sm:flex-col">
-                            <div class="flex-1 sm:py-2">損益</div>
-                            <div
-                                class="flex-1 text-right sm:text-center"
-                                :class="profitClass('profit', investBalance.profit)"
-                                v-text="moneyFormat(investBalance.profit)"
-                            ></div>
-                        </div>
-                        <div class="flex sm:flex-1 sm:flex-col">
-                            <div class="flex-1 sm:py-2">費用</div>
-                            <div class="flex-1 text-right sm:text-center"
-                                 v-text="moneyFormat(investBalance.expense)"></div>
-                        </div>
-                        <div class="flex sm:flex-1 sm:flex-col">
-                            <div class="flex-1 sm:py-2">結餘</div>
-                            <div class="flex-1 text-right sm:text-center"
-                                 v-text="moneyFormat(investBalance.balance)"></div>
-                        </div>
-                    </div>
-                </FormRow>
-            </div>
-        </FormPanel>
+            :rowLink="showDetail"
+        ></DivTable>
     </div>
-    <FormPanel>
-
-    </FormPanel>
 
     <Modal v-model="show">
-        <div class="hidden sm:flex text-center border-b">
+        <div v-if="0" class="hidden sm:flex text-center border-b">
             <div class="py-1.5 w-28">日期</div>
             <div class="py-1.5 w-28">類型</div>
             <div class="py-1.5 w-28">金額</div>
             <div class="py-1.5 w-40">備註</div>
-            <div v-if="isAdmin" class=""></div>
+            <div v-if="this.$page.props.isAdmin" class=""></div>
         </div>
-        <div class="divide-y sm:divide-y-0">
+        <div v-if="0" class="divide-y sm:divide-y-0">
             <div class="flex flex-wrap sm:flex-nowrap py-1.5" v-for="record in historyDetail">
                 <div class="flex-grow sm:flex-grow-0 sm:w-28 py-0.5 text-center" v-text="record.occurred_at"></div>
 
-                <div class="sm:order-last" v-if="isAdmin">
+                <div class="sm:order-last" v-if="this.$page.props.isAdmin">
                     <button class="btn btn-red btn-sm" @click="deleteDetail(record.id)">Delete</button>
                 </div>
 
@@ -103,68 +47,24 @@
 
 <script>
 import Basic from "@/Layouts/Basic"
-import ListTable from "@/Components/ListTable"
+import DivTable from "@/Components/DivTable"
 import {FormPanel, FormTitle, FormRow} from "@/Components/Form"
 import Modal from "@/Components/Modal"
-import {usePage} from '@inertiajs/inertia-vue3'
 import moment from "moment";
 
 export default {
     layout: Basic,
     components: {
-        ListTable,
+        DivTable,
         FormPanel,
         FormTitle,
         FormRow,
         Modal
     },
     props: {
-        isAdmin: Boolean,
-        year: Number,
-        investYears: Array,
-        investRecords: Array,
-        investBalances: Array
-
+        balances: Object,
     },
     setup() {
-        const listHeaders = [
-            '入金',
-            '出金',
-            '損益',
-            '費用',
-            '結餘',
-            '備註'
-        ]
-        const listColumns = [
-            {
-                class: 'text-center',
-                content: 'period'
-            },
-            {
-                class: 'text-right',
-                content: 'deposit'
-            },
-            {
-                class: 'text-right',
-                content: 'withdraw'
-            },
-            {
-                class: 'text-right',
-                content: 'profit'
-            },
-            {
-                class: 'text-right',
-                content: 'expense'
-            },
-            {
-                class: 'text-right',
-                content: 'balance'
-            },
-            {
-                content: 'note'
-            },
-        ]
-
         const typeText = {
             deposit: '入金',
             withdraw: '出金',
@@ -175,20 +75,53 @@ export default {
 
         const moneyFormat = window.moneyFormat
 
+        const profitClass = window.profitClass
+
+        const balanceTable = [
+            {
+                header: "年月",
+                headerClass: "pb-1 mb-1 border-b sm:pb-0 sm:mb-0 sm:border-b-0",
+                content: "period",
+                contentClass: "text-center pb-1 mb-1 border-b sm:pb-0 sm:mb-0 sm:border-b-0"
+            },
+            {
+                header: "入金",
+                headerClass: "mb-0.5 sm:mb-0",
+                content: (row) => moneyFormat(row.deposit),
+                contentClass: "text-right"
+            },
+            {
+                header: "出金",
+                headerClass: "mb-0.5 sm:mb-0",
+                content: (row) => moneyFormat(row.withdraw),
+                contentClass: "text-right"
+            },
+            {
+                header: "損益",
+                headerClass: "mb-0.5 sm:mb-0",
+                content: (row) => moneyFormat(row.profit),
+                contentClass: (row) => [
+                    "text-right",
+                    profitClass(row.profit),
+                ]
+            },
+            {
+                header: "費用",
+                headerClass: "mb-0.5 sm:mb-0",
+                content: (row) => moneyFormat(row.expense),
+                contentClass: "text-right"
+            },
+            {
+                header: "結餘",
+                headerClass: "mb-0.5 sm:mb-0",
+                content: (row) => moneyFormat(row.balance),
+                contentClass: "text-right"
+            }
+        ]
+
         return {
-            listHeaders,
-            listColumns,
             typeText,
-            moneyFormat
-        }
-    },
-    watch: {
-        year() {
-            let params = new URLSearchParams(location.search)
-
-            params.set('year', this.year.toString())
-
-            this.$inertia.get(`?${params.toString()}`)
+            balanceTable,
         }
     },
     data() {
@@ -198,20 +131,8 @@ export default {
         }
     },
     methods: {
-        profitClass(type, amount) {
-            if (type !== 'profit' || parseInt(amount) === 0) {
-                return ''
-            }
-
-            return [
-                'font-bold',
-                amount > 0 ? 'text-red-600' : 'text-green-600'
-            ]
-        },
-        showDetail(period) {
-            let momentPeriod = moment(period)
-
-            this.historyDetail = this.investRecords.filter((history) => momentPeriod.isSame(history.occurred_at, 'month'))
+        showDetail(row) {
+            console.log(row)
             this.show = true
         },
         deleteDetail(historyId) {

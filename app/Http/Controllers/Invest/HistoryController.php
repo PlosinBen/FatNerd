@@ -25,7 +25,19 @@ class HistoryController extends Controller
 
         if (request()->has('account') && auth()->user()->isAdmin()) {
             $investAccountId = request()->get('account');
-        }
+        };
+
+
+        return $this
+            ->title('歷史權益')
+            ->view('Invest/History/Index', [
+                'balances' => fn() => InvestBalanceResource::collection(
+                    $investService->getList([
+                        'invest_account_id' => $investAccountId
+                    ])
+                ),
+            ]);
+
 
         $year = (int)request()->get('year');
 

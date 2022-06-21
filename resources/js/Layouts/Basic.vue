@@ -15,7 +15,7 @@
                         </InertiaLink>
                         <InertiaLink v-if="false" href="#" class="hover:text-gray-800">記帳</InertiaLink>
 
-                        <InertiaLink class="hover:text-gray-800" href="/about/privacy">隱私權政策</InertiaLink>
+                        <a class="hover:text-gray-800" href="/about/privacy" target="_blank" rel="noopener noreferrer">隱私權政策</a>
                     </nav>
 
                     <div class="relative h-10">
@@ -93,6 +93,9 @@ export default {
         this.user = this.$page.props.user
         this.isAdmin = this.$page.props.isAdmin
 
+        this.loadProps()
+    },
+    beforeUpdate() {
         this.loadProps()
     }
 }

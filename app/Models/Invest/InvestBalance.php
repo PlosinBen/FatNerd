@@ -78,6 +78,15 @@ class InvestBalance extends Model
         $query->where('period', '<=', $value);
     }
 
+    public function InvestHistory()
+    {
+        return $this->hasMany(
+            InvestHistory::class,
+            'invest_account_id',
+            'invest_account_id'
+        );
+    }
+
     public function InvestFutures()
     {
         return $this->belongsTo(InvestFutures::class);

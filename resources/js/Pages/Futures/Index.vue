@@ -5,28 +5,10 @@
         </div>
         <DivTable
             class="max-w-sm mx-auto sm:max-w-full"
-            :list="list.data"
+            v-bind="list"
             :columns="columnsConfig"
             :rowLink="tableRowLink"
         ></DivTable>
-
-
-        <ListTable
-            class="hidden"
-            :list="list.data"
-            :headers="tableHeader"
-            :columns="tableColumns"
-            :colors="['bg-white', 'bg-gray-100']"
-        >
-            <template #column_0="{row}">
-                <InertiaLink class="border-b space-x-2" :href="`/invest/futures/${row.period}`">
-                    <span class="text-blue-600">
-                        {{ row.period }}
-                    </span>
-                    <i class="hidden fas fa-sm fa-external-link-alt"></i>
-                </InertiaLink>
-            </template>
-        </ListTable>
     </div>
 </template>
 
