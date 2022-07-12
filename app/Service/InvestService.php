@@ -21,11 +21,11 @@ class InvestService
         $this->investHistoryRepository = $investHistoryRepository;
     }
 
-    public function getList($filter = [])
+    public function getList($filter = [], $perPage = 10)
     {
         return app(InvestBalanceRepository::class)
             ->with('InvestHistory')
-            ->perPage(12)
+            ->perPage($perPage)
             ->fetchPagination(
                 array_merge([
                     'orderBy' => 'period DESC'

@@ -27,17 +27,15 @@ class HistoryController extends Controller
             $investAccountId = request()->get('account');
         };
 
-
         return $this
             ->title('歷史權益')
             ->view('Invest/History/Index', [
                 'balances' => fn() => InvestBalanceResource::collection(
                     $investService->getList([
                         'invest_account_id' => $investAccountId
-                    ])
-                ),
+                    ], 24)
+                )
             ]);
-
 
         $year = (int)request()->get('year');
 

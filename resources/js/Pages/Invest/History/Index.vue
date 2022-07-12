@@ -7,7 +7,7 @@
 
     <div class="">
         <DivTable
-            class="max-w-screen-md mx-auto"
+            class="max-w-screen-xl mx-auto"
             v-bind="balances"
             :columns="balanceTable"
 
