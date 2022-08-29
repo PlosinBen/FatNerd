@@ -11,7 +11,7 @@
             </div>
             <div
                 class="block sm:flex py-2.5 px-3"
-                :class="{'cursor-pointer hover:bg-blue-100': hasRowLink}"
+                :class="{'cursor-pointer hover:bg-blue-100': rowHover}"
                 v-for="row in data"
                 @click="rowClick(row)"
             >
@@ -83,7 +83,16 @@ export default {
         meta: Object,
 
         columns: Array,
-        rowLink: Function
+        rowClick: {
+            type: Function,
+            default: () => {
+                return () => {}
+            }
+        },
+        rowHover: {
+            type: Boolean,
+            default: () => false
+        }
     },
     setup({columns}) {
         const headers = []
@@ -107,8 +116,8 @@ export default {
         }
     },
     computed: {
-        hasRowLink() {
-            return typeof this.rowLink === "function"
+        hasRowClick() {
+            return typeof this.rowClick === "function"
         }
     },
     methods: {
@@ -117,12 +126,6 @@ export default {
         },
         getColumn(content, row) {
             return {}.toString.call(content) === '[object Function]' ? content(row) : content
-        },
-        rowClick(row) {
-            if(this.hasRowLink) {
-                let link = this.rowLink(row)
-                this.$inertia.get(link)
-            }
         }
     }
 }

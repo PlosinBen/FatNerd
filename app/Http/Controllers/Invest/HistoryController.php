@@ -27,14 +27,19 @@ class HistoryController extends Controller
             $investAccountId = request()->get('account');
         };
 
+//        InvestHistoryResource::collection($investService->getRecordsByYear($investAccountId, $year))
+
+        $historyList = $investService
+            ->getBalanceList($investAccountId, 24);
+
         return $this
             ->title('歷史權益')
             ->view('Invest/History/Index', [
-                'balances' => fn() => InvestBalanceResource::collection(
-                    $investService->getList([
-                        'invest_account_id' => $investAccountId
-                    ], 24)
-                )
+                'balances' => fn() => InvestBalanceResource::collection($historyList),
+                'histories' => InvestHistoryResource::collection($investService->getPeriodHistory(
+                    $investAccountId,
+                    array_column($historyList->items(), 'period')
+                ))
             ]);
 
         $year = (int)request()->get('year');

@@ -4,12 +4,12 @@ namespace App\Repository\Invest;
 
 use App\Contract\Repository;
 use App\Data\InvestHistoryType;
-use App\Models\Invest\InvestAccount;
 use App\Models\Invest\InvestHistory;
 use App\Support\BcMath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class InvestHistoryRepository extends Repository
 {
@@ -22,6 +22,19 @@ class InvestHistoryRepository extends Repository
     protected function getModelInstance()
     {
         return parent::getModelInstance();
+    }
+
+    public function fetchByPeriods(int $investAccountId, $periods)
+    {
+        return $this->getModelInstance()
+            ->where('invest_account_id', $investAccountId)
+            ->whereIn(
+                DB::raw("date_format(occurred_at, '%Y-%m')"),
+                $periods
+            )
+            ->orderBy('occurred_at')
+            ->orderBy('serial_number')
+            ->get();
     }
 
     /**

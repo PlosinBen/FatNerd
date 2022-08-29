@@ -11,6 +11,19 @@ class InvestBalanceRepository extends \App\Contract\Repository
 {
     protected $model = InvestBalance::class;
 
+    /**
+     * @param int $investAccountId
+     * @param string $sort
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function fetchPaginationByInvestAccountId(int $investAccountId, string $sort)
+    {
+        return $this->fetchPagination([
+            'invest_account_id' => $investAccountId,
+            'sort' => $sort
+        ]);
+    }
+
     public function fetchByAccountPeriod(int $investAccountId, Carbon $period)
     {
         return $this->modelSetFilter([
@@ -105,7 +118,7 @@ class InvestBalanceRepository extends \App\Contract\Repository
                 BcMath::comp($computable, $numberPerQuota) ? BcMath::div($computable, $numberPerQuota) : 1
             );
 
-            if( BcMath::equal($quota, 0) ) {
+            if (BcMath::equal($quota, 0)) {
                 $quota = 0.5;
             }
         }

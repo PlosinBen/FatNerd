@@ -12,9 +12,10 @@ use Carbon\Carbon;
 
 class FuturesService
 {
-    public function getList($filter = [])
+    public function getList($filter = [], int $perPage = 24)
     {
         return app(InvestFuturesRepository::class)
+            ->perPage($perPage)
             ->fetchPagination(['orderBy' => 'period Desc'] + $filter);
     }
 

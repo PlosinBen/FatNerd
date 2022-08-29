@@ -26,11 +26,11 @@ window.profitClass = (amount, type) => {
     if (typeof type === "string" && type !== 'profit') {
         return ''
     }
-    if (amount == 0) {
+    if (amount === 0) {
         return ''
     }
 
-    return 'font-bold ' + (amount > 0 ? 'text-red-600' : 'text-green-600')
+    return (amount > 0 ? 'income-profit' : 'income-loss')
 }
 
 window.moneyFormatter = () => new Intl.NumberFormat('zh-TW', {
@@ -43,4 +43,20 @@ window.moneyFormat = (money) => {
     })
 
     return window.formatter.format(money)
+}
+
+Array.prototype.group = function(func) {
+    const response = {}
+
+    this.forEach((element) => {
+        const key = func(element)
+
+        if(!response.hasOwnProperty(key)) {
+            response[key] = []
+        }
+
+        response[key].push(element)
+    })
+
+    return response
 }

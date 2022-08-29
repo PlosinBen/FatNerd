@@ -10,6 +10,7 @@ use App\Repository\Invest\InvestBalanceRepository;
 use App\Repository\Invest\InvestHistoryRepository;
 use App\Support\BcMath;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class InvestService
@@ -21,16 +22,37 @@ class InvestService
         $this->investHistoryRepository = $investHistoryRepository;
     }
 
-    public function getList($filter = [], $perPage = 10)
+    /**
+     * @param int $investAccountId
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getBalanceList(int $investAccountId, int $perPage = 12)
     {
-        return app(InvestBalanceRepository::class)
-            ->with('InvestHistory')
+        /**
+         * @var InvestBalanceRepository $investBalanceRepository
+         */
+        $investBalanceRepository = app(InvestBalanceRepository::class);
+
+        return $investBalanceRepository
             ->perPage($perPage)
-            ->fetchPagination(
-                array_merge([
-                    'orderBy' => 'period DESC'
-                ], $filter)
-            );
+            ->fetchPaginationByInvestAccountId($investAccountId, 'period DESC');
+    }
+
+    /**
+     * @param int $investAccountId
+     * @param array $periods
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getPeriodHistory(int $investAccountId, array $periods)
+    {
+        /**
+         * @var InvestHistoryRepository $investHistoryRepository
+         */
+        $investHistoryRepository = app(InvestHistoryRepository::class);
+
+        return $investHistoryRepository
+            ->fetchByPeriods($investAccountId, $periods);
     }
 
     public function getListByYear(int $investAccountId, int $year)

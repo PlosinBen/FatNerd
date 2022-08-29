@@ -11,20 +11,20 @@
             v-bind="balances"
             :columns="balanceTable"
 
-            :rowLink="showDetail"
+            :rowClick="showDetail"
+            :rowHover="true"
         ></DivTable>
     </div>
 
     <Modal v-model="show">
-        <div v-if="0" class="hidden sm:flex text-center border-b">
+        <div class="hidden sm:flex text-center border-b">
             <div class="py-1.5 w-28">日期</div>
             <div class="py-1.5 w-28">類型</div>
             <div class="py-1.5 w-28">金額</div>
             <div class="py-1.5 w-40">備註</div>
-            <div v-if="this.$page.props.isAdmin" class=""></div>
         </div>
-        <div v-if="0" class="divide-y sm:divide-y-0">
-            <div class="flex flex-wrap sm:flex-nowrap py-1.5" v-for="record in historyDetail">
+        <div class="divide-y sm:divide-y-0">
+            <div class="flex flex-wrap sm:flex-nowrap py-1.5" v-for="record in modelHistories">
                 <div class="flex-grow sm:flex-grow-0 sm:w-28 py-0.5 text-center" v-text="record.occurred_at"></div>
 
                 <div class="sm:order-last" v-if="this.$page.props.isAdmin">
@@ -63,8 +63,9 @@ export default {
     },
     props: {
         balances: Object,
+        histories: Object
     },
-    setup() {
+    setup({histories}) {
         const typeText = {
             deposit: '入金',
             withdraw: '出金',
@@ -72,6 +73,8 @@ export default {
             expense: '費用',
             transfer: '出金轉存'
         }
+
+        const monthHistories = histories.group(({occurred_at}) => moment(occurred_at).format('Y-MM'))
 
         const moneyFormat = window.moneyFormat
 
@@ -122,17 +125,21 @@ export default {
         return {
             typeText,
             balanceTable,
+            monthHistories,
+            moneyFormat,
+            profitClass
         }
     },
     data() {
         return {
             show: false,
-            historyDetail: undefined
+            modelHistories: []
         }
     },
     methods: {
         showDetail(row) {
-            console.log(row)
+            this.modelHistories = this.monthHistories[row.period]
+
             this.show = true
         },
         deleteDetail(historyId) {
