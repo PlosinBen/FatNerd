@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     locales \
     # For php composer
     unzip \
+    # for build frontend
+    npm \
     && apt-get clean \
     # install php ext
     && docker-php-ext-install -j$(nproc) mysqli \
@@ -17,7 +19,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && docker-php-ext-install -j$(nproc) tokenizer \
     && docker-php-ext-install -j$(nproc) bcmath \
-    && docker-php-ext-install -j$(nproc) zip
+    && docker-php-ext-install -j$(nproc) zip \
+    && npm install -g yarn && yarn install \
+    && apt-get clean
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
